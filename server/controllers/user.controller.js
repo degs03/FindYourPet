@@ -91,7 +91,7 @@ module.exports.forgotPassword = async (req, res) => {
         const resetToken = user.createResetPasswordToken();
         await user.save({ validateBeforeSave: false }); //desactiva las validaciones antes de guardar el user
         //enviar al usuario el token
-        const resetUrl = `http://localhost:8000/api/user/resetPassword/${resetToken}`;
+        const resetUrl = `http://localhost:3000/account/resetPassword/${resetToken}`;
         const message = resetUrl
         await sendEmail({
             email: user.email,

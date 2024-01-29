@@ -12,9 +12,9 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-/**import '@fontsource/walter-turncoat';
+import '@fontsource/walter-turncoat';
 import '@fontsource/roboto';
-**/
+
 const pages = ['Todas las publicaciones', 'Agregar publicación'];
 const settings = ['Perfil', 'Cerrar sesión'];
 const href = ['/posts', '/posts/new'];

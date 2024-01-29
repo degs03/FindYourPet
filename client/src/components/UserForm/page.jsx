@@ -1,15 +1,9 @@
 'use client'
-
 import { Avatar, Box, Button, Container, Grid, TextField, Typography } from "@mui/material";
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-
 const { Fragment, useState, useEffect } = require("react")
-
-
-
-
 const UserForm = ({ onSubmit, preset = {}, isSignUp }) => { //preset trae data
     const router = useRouter();
     const [firstName, setFirstName] = useState("");
@@ -18,13 +12,13 @@ const UserForm = ({ onSubmit, preset = {}, isSignUp }) => { //preset trae data
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState({});
+    const [formErrors, setFormErrors] = useState({});
     const createdOk = () => {
         if (isSignUp) {
             router.push("/account/login");
         }
         router.push("/main");
     };
-
     const createdFail = (errorMsg) => {
         if (errorMsg.response?.data?.message?.errors) {
             const validationErrors = errorMsg.response.data.message.errors;
@@ -74,6 +68,16 @@ const UserForm = ({ onSubmit, preset = {}, isSignUp }) => { //preset trae data
             setConfirmPassword(preset.confirmPassword);
         }
     }, [preset]);
+    useEffect(() => {
+        setFormErrors((prevErrors) => ({
+            ...prevErrors,
+            firstName: error.firstName ? error.firstName.message : "",
+            lastName: error.lastName ? error.lastName.message : "",
+            email: error.email ? error.email.message : "",
+            password: error.password ? error.password.message : "",
+            confirmPassword: error.confirmPassword ? error.confirmPassword.message : "",
+        }));
+    }, [error]);
     const Copyright = (value) => {
         return (
             <Typography variant="body2" color="text.secondary" align="center" {...value}>
@@ -113,9 +117,12 @@ const UserForm = ({ onSubmit, preset = {}, isSignUp }) => { //preset trae data
                                         label="First Name"
                                         fullWidth
                                         value={firstName}
-                                        onChange={(e) => setFirstName(e.target.value)}
-                                        error={error.firstName ? true : false}
-                                        helperText={error.firstName?.message}
+                                        onChange={(e) => {
+                                            setFirstName(e.target.value);
+                                            setFormErrors((prevErrors) => ({ ...prevErrors, firstName: "" }));
+                                        }}
+                                        error={formErrors.firstName ? true : false}
+                                        helperText={formErrors.firstName}
                                     />) : null}
                             </Grid>
                             <Grid item xs={12} sm={6} >
@@ -126,9 +133,12 @@ const UserForm = ({ onSubmit, preset = {}, isSignUp }) => { //preset trae data
                                         label="Last Name"
                                         fullWidth
                                         value={lastName}
-                                        onChange={(e) => setLastName(e.target.value)}
-                                        error={error.lastName ? true : false}
-                                        helperText={error.lastName?.message}
+                                        onChange={(e) => {
+                                            setLastName(e.target.value);
+                                            setFormErrors((prevErrors) => ({ ...prevErrors, lastName: "" }));
+                                        }}
+                                        error={formErrors.lastName ? true : false}
+                                        helperText={formErrors.lastName}
                                     />) : null}
                             </Grid>
                             <Grid item xs={12} >
@@ -138,9 +148,12 @@ const UserForm = ({ onSubmit, preset = {}, isSignUp }) => { //preset trae data
                                     label="E-mail"
                                     fullWidth
                                     value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    error={error.email ? true : false}
-                                    helperText={error.email?.message}
+                                    onChange={(e) => {
+                                        setEmail(e.target.value);
+                                        setFormErrors((prevErrors) => ({ ...prevErrors, email: "" }));
+                                    }}
+                                    error={formErrors.email ? true : false}
+                                    helperText={formErrors.email}
                                 />
                             </Grid>
                             {isSignUp == true ? (
@@ -152,9 +165,12 @@ const UserForm = ({ onSubmit, preset = {}, isSignUp }) => { //preset trae data
                                         type="password"
                                         fullWidth
                                         value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                        error={error.password ? true : false}
-                                        helperText={error.password?.message}
+                                        onChange={(e) => {
+                                            setPassword(e.target.value);
+                                            setFormErrors((prevErrors) => ({ ...prevErrors, password: "" }));
+                                        }}
+                                        error={formErrors.password ? true : false}
+                                        helperText={formErrors.password}
                                     />
                                 </Grid>
                             ) :
@@ -166,9 +182,12 @@ const UserForm = ({ onSubmit, preset = {}, isSignUp }) => { //preset trae data
                                         type="password"
                                         fullWidth
                                         value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                        error={error.password ? true : false}
-                                        helperText={error.password?.message}
+                                        onChange={(e) => {
+                                            setPassword(e.target.value);
+                                            setFormErrors((prevErrors) => ({ ...prevErrors, password: "" }));
+                                        }}
+                                        error={formErrors.password ? true : false}
+                                        helperText={formErrors.password}
                                     />
                                 </Grid>
                             }
@@ -181,9 +200,12 @@ const UserForm = ({ onSubmit, preset = {}, isSignUp }) => { //preset trae data
                                         type="password"
                                         fullWidth
                                         value={confirmPassword}
-                                        onChange={(e) => setConfirmPassword(e.target.value)}
-                                        error={error.confirmPassword ? true : false}
-                                        helperText={error.confirmPassword?.message}
+                                        onChange={(e) => {
+                                            setConfirmPassword(e.target.value);
+                                            setFormErrors((prevErrors) => ({ ...prevErrors, confirmPassword: "" }));
+                                        }}
+                                        error={formErrors.confirmPassword ? true : false}
+                                        helperText={formErrors.confirmPassword}
                                     />) : null}
                             </Grid>
                             <Grid item xs={12}>
@@ -200,15 +222,26 @@ const UserForm = ({ onSubmit, preset = {}, isSignUp }) => { //preset trae data
                         </Grid>
                         <Grid container justifyContent="flex-end">
                             <Grid item>
-                                {isSignUp ?
+                                {isSignUp ? s
                                     (
                                         <Link href="/account/login" variant="body2">
                                             Ya tienes una cuenta? Inicia sesion.
                                         </Link>
                                     ) :
-                                    (<Link href="/account/register" variant="body2">
-                                        Aun no tienes una cuenta? Registrate.
-                                    </Link>
+                                    (
+                                        <Grid container justifyContent="flex-end">
+                                            <Grid item>
+                                                <Link href="/account/register" variant="body2">
+                                                    Aun no tienes una cuenta? Registrate.
+                                                </Link>
+                                            </Grid>
+                                            <Grid item sx={{mt:2}}>
+                                                <Link href="/account/forgotPassword" variant="body2">
+                                                    Olvidaste tu contraseña?
+                                                </Link>
+                                            </Grid>
+                                        </Grid>
+
                                     )
                                 }
                             </Grid>
@@ -220,6 +253,4 @@ const UserForm = ({ onSubmit, preset = {}, isSignUp }) => { //preset trae data
         </Fragment >
     )
 }
-
-
 export default UserForm; 
