@@ -92,7 +92,7 @@ module.exports.forgotPassword = async (req, res) => {
         await user.save({ validateBeforeSave: false }); //desactiva las validaciones antes de guardar el user
         //enviar al usuario el token
         const resetUrl = `http://localhost:8000/api/user/resetPassword/${resetToken}`;
-        const message = `Recibimos su solicitud. Use el link que le hemos proporcionado\n\n${resetUrl}\n\n Este link solo es valido por 10 minutos`
+        const message = resetUrl
         await sendEmail({
             email: user.email,
             subject: 'Solicitud de cambio de contraseña',
