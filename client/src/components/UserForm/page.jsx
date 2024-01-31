@@ -17,7 +17,7 @@ const UserForm = ({ onSubmit, preset = {}, isSignUp }) => { //preset trae data
         if (isSignUp) {
             router.push("/account/login");
         }
-        router.push("/main");
+        router.push("/");
     };
     const createdFail = (errorMsg) => {
         if (errorMsg.response?.data?.message?.errors) {

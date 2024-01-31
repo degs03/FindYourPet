@@ -141,7 +141,7 @@ module.exports.resetPassword = async (req, res) => {
         res.json({ message: "logged ok" })
     } catch (error) {
         console.error(error.message);
-        return res.status(500).json({ message: "Ha ocurrido un error en el servidor." });
+        return res.status(500).json({ message: error });
     }
 }
 

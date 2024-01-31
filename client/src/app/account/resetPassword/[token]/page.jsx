@@ -5,6 +5,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Link from "next/link";
 import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
+import Swal from 'sweetalert2';
 
 const { Fragment, useState, useEffect } = require("react")
 
@@ -13,26 +14,37 @@ const resetPassword = () => {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState({});
     const router = useRouter();
-    const [alert, setAlert] = useState(false);
     const { token } = useParams();
-
     const reset = async (data) => {
         try {
             const response = await axios.patch(`http://localhost:8000/api/user/resetPassword/${token}`, data);
             const result = await response.data;
             console.log(result);
             router.push('/account/login');
-            setAlert(true);
+            Swal.fire({
+                icon: "success",
+                title: "Se ha cambiado la contraseña!",
+                showConfirmButton: false,
+                timer: 1500
+            });
         } catch (error) {
             setError(error);
             console.log(error);
-            const validationErrors = error.response.data;
+            const validationErrors = error.response.data?.message.errors;
+            const alertError =  error.response.data?.message;
+            if(alertError == "El link es invalido o ha expirado!"){
+                Swal.fire({
+                    icon: "error",
+                    title: alertError,
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            }
             setError({
-                password: validationErrors.password,
-                confirmPassword: validationErrors.confirmPassword,
+                password: validationErrors?.password,
+                confirmPassword: validationErrors?.confirmPassword,
             })
             console.log(error);
-            setInvalidError(error.response?.data.message )
         }
     }
     const handleFormSubmit = (e) => {
@@ -43,7 +55,6 @@ const resetPassword = () => {
         }
         reset(data);
     }
-
     useEffect(() => {
         setError({});
     }, [password, confirmPassword]);
@@ -74,7 +85,7 @@ const resetPassword = () => {
                         <LockOutlinedIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5">
-                        Recupera tu contraseña!
+                        Recupera tu contraseña
                     </Typography>
                     <Box component="form" noValidate sx={{ mt: 3 }}>{/*mt = margin bottom */}
                         <Grid container spacing={2}>
@@ -82,19 +93,19 @@ const resetPassword = () => {
                                 <TextField
                                     required
                                     name="password"
-                                    label="Password"
+                                    label="Contraseña"
                                     fullWidth
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     error={error?.password ? true : false}
-                                    helperText={error?.email?.message}
+                                    helperText={error?.password?.message}
                                 />
                             </Grid>
                             <Grid item xs={12} >
                                 <TextField
                                     required
                                     name="password"
-                                    label="Confirm Password"
+                                    label="Confirma tu contraseña"
                                     fullWidth
                                     value={confirmPassword}
                                     onChange={(e) => setConfirmPassword(e.target.value)}

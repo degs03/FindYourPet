@@ -1,6 +1,7 @@
 'use client'
 import UserForm from "@/components/UserForm/page";
 import axios from "axios";
+import Swal from 'sweetalert2';
 
 const { Fragment } = require("react")
 
@@ -11,6 +12,12 @@ const Login = () => {
             const result = await response.data;
             console.log(result);
             onSuccess(result);
+            Swal.fire({
+                icon: "success",
+                title: "Has iniciado sesión correctamente",
+                showConfirmButton: false,
+                timer: 1500
+            });
         } catch (error) {
             onFail(error); 
             console.log(error);
