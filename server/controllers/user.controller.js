@@ -135,7 +135,7 @@ module.exports.resetPassword = async (req, res) => {
         await user.save({ validateBeforeSave: true });
         const newJWT = jwt.sign({
             _id: user._id
-        }, secretKey, { expiresIn: "100000s" });
+        }, secretKey, { expiresIn: "60min" });
         res.cookie("userToken", newJWT, secretKey, { httpOnly: true });
         res.status(200);
         res.json({ message: "logged ok" })

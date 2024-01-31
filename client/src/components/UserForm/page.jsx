@@ -222,7 +222,7 @@ const UserForm = ({ onSubmit, preset = {}, isSignUp }) => { //preset trae data
                         </Grid>
                         <Grid container justifyContent="flex-end">
                             <Grid item>
-                                {isSignUp ? s
+                                {isSignUp ?
                                     (
                                         <Link href="/account/login" variant="body2">
                                             Ya tienes una cuenta? Inicia sesion.
