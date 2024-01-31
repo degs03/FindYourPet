@@ -41,6 +41,10 @@ const PostSchema = new mongoose.Schema({
         minLength: [1, "Debe ser mayor a 1 caracter."],
         maxLength: [1000, "Debe ser menor a 1000 caracteres."]
     },
+    location: {
+        type: Object,
+        required:[true, "La ubicación es obligatoria."],
+    },
     image: {
         type: String,
         required:[true, "La imagen es obligatoria."]

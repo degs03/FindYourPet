@@ -13,12 +13,7 @@ const UserForm = ({ onSubmit, preset = {}, isSignUp }) => { //preset trae data
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState({});
     const [formErrors, setFormErrors] = useState({});
-    const createdOk = () => {
-        if (isSignUp) {
-            router.push("/account/login");
-        }
-        router.push("/");
-    };
+    const createdOk = () => {isSignUp==true?router.push("/account/login"):router.push("/");};
     const createdFail = (errorMsg) => {
         if (errorMsg.response?.data?.message?.errors) {
             const validationErrors = errorMsg.response.data.message.errors;
@@ -105,11 +100,11 @@ const UserForm = ({ onSubmit, preset = {}, isSignUp }) => { //preset trae data
                         <LockOutlinedIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5">
-                        {isSignUp == true ? ('Sign up') : ('Sign in')}
+                        {isSignUp == true ? ('Registrate') : ('Iniciar sesión')}
                     </Typography>
                     <Box component="form" noValidate sx={{ mt: 3 }}>{/*mt = margin bottom */}
                         <Grid container spacing={2}>
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={6} sm={6}>
                                 {isSignUp == true ? (
                                     <TextField
                                         required
@@ -125,7 +120,7 @@ const UserForm = ({ onSubmit, preset = {}, isSignUp }) => { //preset trae data
                                         helperText={formErrors.firstName}
                                     />) : null}
                             </Grid>
-                            <Grid item xs={12} sm={6} >
+                            <Grid item xs={6} sm={6} >
                                 {isSignUp == true ? (
                                     <TextField
                                         required
@@ -157,11 +152,11 @@ const UserForm = ({ onSubmit, preset = {}, isSignUp }) => { //preset trae data
                                 />
                             </Grid>
                             {isSignUp == true ? (
-                                <Grid item xs={12} sm={6} >
+                                <Grid item xs={6} sm={6} >
                                     <TextField
                                         required
                                         name="password"
-                                        label="Password"
+                                        label="Contraseña"
                                         type="password"
                                         fullWidth
                                         value={password}
@@ -178,7 +173,7 @@ const UserForm = ({ onSubmit, preset = {}, isSignUp }) => { //preset trae data
                                     <TextField
                                         required
                                         name="password"
-                                        label="Password"
+                                        label="Contraseña"
                                         type="password"
                                         fullWidth
                                         value={password}
@@ -191,12 +186,12 @@ const UserForm = ({ onSubmit, preset = {}, isSignUp }) => { //preset trae data
                                     />
                                 </Grid>
                             }
-                            <Grid item xs={12} sm={6} >
+                            <Grid item xs={6} sm={6} >
                                 {isSignUp == true ? (
                                     <TextField
                                         required
                                         name="confirmPassword"
-                                        label="Confirm Password"
+                                        label="Confirmar Contraseña"
                                         type="password"
                                         fullWidth
                                         value={confirmPassword}
@@ -216,7 +211,7 @@ const UserForm = ({ onSubmit, preset = {}, isSignUp }) => { //preset trae data
                                     sx={{ mt: 3, mb: 2 }}
                                     onClick={handleFormSubmit}
                                 >
-                                    {isSignUp ? 'Sign Up' : 'Sign In'}
+                                    {isSignUp ? 'Registrate' : 'Iniciar sesión'}
                                 </Button>
                             </Grid>
                         </Grid>

@@ -23,16 +23,16 @@ const UserSchema = new mongoose.Schema({
         trim: true, //Elimina los espacios en blanco al inicio y al final
         lowercase: true, //Convierte todo a minuscula antes de enviar el formulario
         unique: true,
-        required: [true, "El email es obligatorio"],
+        required: [true, "El email es obligatorio."],
         validate: {
             validator: val => /^([\w-\.]+@([\w-]+\.)+[\w-]+)?$/.test(val),
-            message: "Please enter a valid email"
+            message: "Por favor, ingrese un email válido."
         }
     },
     password: {
         type: String,
         required: [true, "La contraseña es obligatoria."],
-        minLength: [8, "La contraseña debe tener mas de 8 caracteres"],
+        minLength: [8, "La contraseña debe tener mas de 8 caracteres."],
     },
     posts: [{
         type: mongoose.Types.ObjectId,
@@ -54,9 +54,9 @@ UserSchema.virtual('confirmPassword')
 // ANTES DE VALIDAR verifica si las contrasenia son iguales 
 UserSchema.pre('validate', function (next) {
     if (!this.confirmPassword) {
-        this.invalidate('confirmPassword', 'Este campo es requerido');
+        this.invalidate('confirmPassword', 'Este campo es requerido.');
     } else if (this.password !== this.confirmPassword) {
-        this.invalidate('confirmPassword', 'Las contraseñas deben coincidir');
+        this.invalidate('confirmPassword', 'Las contraseñas deben coincidir.');
     }
     next();
 });
