@@ -13,10 +13,16 @@ const Register = () => {
             console.log(result);
             onSuccess(result);
             Swal.fire({
+                toast: true,
                 icon: "success",
+                iconColor:"white",
+                position: "bottom",
+                color: "white",
                 title: "Se ha creado la cuenta correctamente",
+                background:"#a5dc86",
                 showConfirmButton: false,
-                timer: 1500
+                timer: 2000,
+                timerProgressBar: true,
             });
         } catch (error) {
             onFail(error);

@@ -14,9 +14,10 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import '@fontsource/walter-turncoat';
 import '@fontsource/roboto';
-
+    
 const pages = ['Todas las publicaciones', 'Agregar publicación'];
 const settings = ['Perfil', 'Cerrar sesión'];
+const settingsLogin = ['Iniciar sesión'];
 const href = ['/posts', '/posts/new'];
 
 const NavBar = () => {
