@@ -1,5 +1,6 @@
 'use client'
 
+import Dropzone from "@/components/Dropzone/page";
 import { Box, Button, Container, Grid, MenuItem, TextField, Typography } from "@mui/material";
 import axios from "axios";
 import { Fragment, useState, useEffect } from "react";
@@ -100,7 +101,6 @@ const newPosts = () => {
                                 <TextField
                                     select
                                     defaultValue="Años"
-                                    label="Seleccione el tiempo"
                                     fullWidth
                                 >
                                     <MenuItem value="Años">
@@ -152,7 +152,7 @@ const newPosts = () => {
                                 />
                             </Grid>
                             <Grid item xs={12} >
-                                <TextField
+                                {/*<TextField
                                     required
                                     name="image"
                                     label="Imagen"
@@ -161,7 +161,8 @@ const newPosts = () => {
                                     onChange={(e) => setImage(e.target.value)}
                                     error={error?.image ? true : false}
                                     helperText={error?.image?.message}
-                                />
+                                />*/}
+                                <Dropzone />
                             </Grid>
                             <Grid container justifyContent="flex-end">
                                 <Grid item>
