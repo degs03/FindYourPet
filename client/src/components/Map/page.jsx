@@ -3,6 +3,8 @@ import React, { useRef, useEffect, useState } from 'react';
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
 import styles from './page.module.css';
 import axios from 'axios';
+import ReactDOMServer from 'react-dom/server';
+import PetsIcon from '@mui/icons-material/Pets';
 import 'mapbox-gl/dist/mapbox-gl.css';
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_API_KEY;
 
@@ -55,7 +57,11 @@ const Map = () => {
         if (posts && map.current) {
             // Muestra el marcador en la ubicación proporcionada
             posts.map((item) => {
-                new mapboxgl.Marker()
+                 // Crear un nuevo elemento DOM
+                const el = document.createElement('div');
+                // Renderizar el icono de React en el elemento DOM como HTML estático
+                el.innerHTML = ReactDOMServer.renderToString(<PetsIcon />);
+                new mapboxgl.Marker(el)
                     .setLngLat(
                         [
                             item.location?.lng,
@@ -65,7 +71,7 @@ const Map = () => {
                     .addTo(map.current);//agrega los marcadores al mapa actual
             });
         }
-    }, [posts]);    
+    }, [posts]);
 
     return (
         <div>
