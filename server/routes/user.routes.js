@@ -11,7 +11,7 @@ router.post("/forgotPassword", UserController.forgotPassword);
 router.patch("/resetPassword/:token", UserController.resetPassword);
 router.delete("/session", UserController.loggout);
 router.get("/cookie", authenticate, UserController.cookie);
-router.get("", UserController.findAllUsers);
+router.get("/", authenticate, UserController.findAllUsers);
 router.get("/:id", UserController.findUserById);
 
 

@@ -8,7 +8,7 @@ const { Fragment } = require("react")
 const Login = () => {
     const createNewUser = async (data, onSuccess, onFail) => {
         try {
-            const response = await axios.post("http://localhost:8000/api/user/session", data);
+            const response = await axios.post("http://localhost:8000/api/user/session", data, {withCredentials: true});// withCredentials, permite recibir y mandar cookies
             const result = await response.data;
             console.log(result);
             onSuccess(result);

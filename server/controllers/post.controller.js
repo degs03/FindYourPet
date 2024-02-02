@@ -1,7 +1,5 @@
 const Post = require("../models/post.model");
 
-
-
 module.exports.findAllPosts = async (req, res) => {
     try {
         const post = await Post.find().populate("user");
@@ -22,7 +20,7 @@ module.exports.findPost = async (req, res) => {
             return;
         }
         res.status(404);
-        res.json({ error: "post not found" });
+        res.json({ error: "Post no encontrado" });
     } catch (error) {
         res.status(500);
         res.json({ error: error });
@@ -33,7 +31,7 @@ module.exports.createPost = async (req, res) => {
         const newPost = await Post.create(req.body);
         res.status(201);
         res.json(newPost);
-
+        console.log("se ha creado exitosamente!")
     } catch (error) {
         res.status(500);
         res.json({ error: error });

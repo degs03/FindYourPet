@@ -4,7 +4,6 @@ const bcrypt = require("bcrypt");
 const secretKey = process.env.JWT_SECRET_KEY;
 const sendEmail = require("../util/email");
 const crypto = require("crypto")
-
 //esto se ejecuta una vez que se valida todo en el user.model
 module.exports.createUser = async (req, res) => {
     try {
@@ -22,8 +21,6 @@ module.exports.createUser = async (req, res) => {
         res.json({ message: error });
     }
 };
-
-
 //Endpoint para logueo
 module.exports.login = async (req, res) => {
     try {
@@ -56,7 +53,6 @@ module.exports.login = async (req, res) => {
         res.json({ message: error });
     }
 }
-
 //Guarda las cookies
 module.exports.cookie = async (req, res) => {
     try {
@@ -66,7 +62,6 @@ module.exports.cookie = async (req, res) => {
         res.json({ message: error });
     }
 }
-
 //Cerrar sesion
 module.exports.loggout = async (req, res) => {
     try {
@@ -77,7 +72,6 @@ module.exports.loggout = async (req, res) => {
         res.json({ message: error });
     }
 }
-
 //FORGOT PASSWORD
 module.exports.forgotPassword = async (req, res) => {
     const user = await User.findOne({ email: req.body.email });
@@ -114,8 +108,6 @@ que el código siga ejecutándose después de haber enviado una respuesta.
 Después de enviar una respuesta en el bloque if (!user), hay que agregar un return para salir de la función
 y evitar que el código siguiente también intente enviar una respuesta.
 */
-
-
 module.exports.resetPassword = async (req, res) => {
     const date = Date.now();
     try {
@@ -144,7 +136,6 @@ module.exports.resetPassword = async (req, res) => {
         return res.status(500).json({ message: error });
     }
 }
-
 //Buscar todos los usuarios
 module.exports.findAllUsers = async (req, res) => {
     try {
@@ -156,7 +147,6 @@ module.exports.findAllUsers = async (req, res) => {
         res.json({ message: error });
     }
 };
-
 //Buscar todos los usuarios por id
 module.exports.findUserById = async (req, res) => {
     const { id } = req.params;

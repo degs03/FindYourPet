@@ -61,7 +61,6 @@ UserSchema.pre('validate', function (next) {
     next();
 });
 //antes de guardar se ejecuta esto y hashea la contrasenia
-// this should go after 
 UserSchema.pre('save', function (next) {
     bcrypt.hash(this.password, 10)
         .then(hash => {
