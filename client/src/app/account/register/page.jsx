@@ -1,4 +1,5 @@
 'use client'
+
 import UserForm from "@/components/UserForm/page";
 import axios from "axios";
 import Swal from 'sweetalert2';

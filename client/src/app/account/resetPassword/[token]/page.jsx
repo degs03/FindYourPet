@@ -1,13 +1,11 @@
 'use client'
-
-import { Avatar, Box, Button, Container, Grid, TextField, Typography } from "@mui/material";
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Link from "next/link";
+import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
 import Swal from 'sweetalert2';
+import FormWrapper from "@/components/FormWrapper/page";
 
-const { Fragment, useState, useEffect } = require("react")
+const { useState, useEffect } = require("react")
 
 const resetPassword = () => {
     const [password, setPassword] = useState("");
@@ -70,82 +68,84 @@ const resetPassword = () => {
     useEffect(() => {
         setError({});
     }, [password, confirmPassword]);
-    const Copyright = (value) => {
-        return (
-            <Typography variant="body2" color="text.secondary" align="center" {...value}>
-                {'Copyright © '}
-                <Link color="inherit" href="/">
-                    FindYourPet
-                </Link>{' '}
-                {new Date().getFullYear()}
-                {'.'}
-            </Typography>
-        );
-    }
+
     return (
-        <Fragment>
-            <Container component="main" maxWidth="xs">{/**Coloca como un componente MAIN y lo dejo su maxWidth a xs O 12 */}
-                <Box
-                    sx={{
-                        marginTop: 8,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                    }}
-                >
-                    <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
-                        <LockOutlinedIcon />
-                    </Avatar>
-                    <Typography component="h1" variant="h5">
-                        Recupera tu contraseña
-                    </Typography>
-                    <Box component="form" noValidate sx={{ mt: 3 }}>{/*mt = margin bottom */}
-                        <Grid container spacing={2}>
-                            <Grid item xs={12} >
-                                <TextField
-                                    required
-                                    name="password"
-                                    label="Contraseña"
+        <FormWrapper>
+            <Typography component="h1" variant="h5" color="#4b3a2e">
+                Recupera tu contraseña
+            </Typography>
+            <Box component="form" noValidate sx={{ mt: 3 }}>{/*mt = margin bottom */}
+                <Grid container spacing={2}>
+                    <Grid item xs={12} >
+                        <TextField
+                            required
+                            name="password"
+                            label="Contraseña"
+                            fullWidth
+                            sx={{
+                                backgroundColor: 'rgba(248, 248, 248, 0.507)',
+                                '& label.Mui-focused': {
+                                    color: '#4b3a2e'
+                                },
+                                '& .MuiOutlinedInput-root': {
+                                    '&.Mui-focused fieldset': {
+                                        borderColor: '#4b3a2e'
+                                    }
+                                }
+                            }}
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            error={error?.password ? true : false}
+                            helperText={error?.password?.message}
+                        />
+                    </Grid>
+                    <Grid item xs={12} >
+                        <TextField
+                            required
+                            name="password"
+                            label="Confirma tu contraseña"
+                            fullWidth
+                            sx={{
+                                backgroundColor: 'rgba(248, 248, 248, 0.507)',
+                                '& label.Mui-focused': {
+                                    color: '#4b3a2e'
+                                },
+                                '& .MuiOutlinedInput-root': {
+                                    '&.Mui-focused fieldset': {
+                                        borderColor: '#4b3a2e'
+                                    }
+                                }
+                            }}
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            error={error?.confirmPassword ? true : false}
+                            helperText={error?.confirmPassword?.message}
+                        />
+                    </Grid>
+                    <Grid container justifyContent="flex-end">
+                        <Grid item>
+                            <Grid item xs={12}>
+                                <Button
+                                    type="submit"
                                     fullWidth
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    error={error?.password ? true : false}
-                                    helperText={error?.password?.message}
-                                />
-                            </Grid>
-                            <Grid item xs={12} >
-                                <TextField
-                                    required
-                                    name="password"
-                                    label="Confirma tu contraseña"
-                                    fullWidth
-                                    value={confirmPassword}
-                                    onChange={(e) => setConfirmPassword(e.target.value)}
-                                    error={error?.confirmPassword ? true : false}
-                                    helperText={error?.confirmPassword?.message}
-                                />
-                            </Grid>
-                            <Grid container justifyContent="flex-end">
-                                <Grid item>
-                                    <Grid item xs={12}>
-                                        <Button
-                                            type="submit"
-                                            fullWidth
-                                            variant="contained"
-                                            sx={{ mt: 3, mb: 2 }}
-                                            onClick={handleFormSubmit}
-                                        >
-                                            Cambiar Contraseña
-                                        </Button>
-                                    </Grid>
-                                </Grid>
+                                    sx={{
+                                        mt: 3,
+                                        backgroundColor: "#8a6c54",
+                                        '&:hover': {
+                                            backgroundColor: "#6b5543",
+                                        }
+                                    }}
+                                    variant="contained"
+                                    onClick={handleFormSubmit}
+                                >
+                                    Cambiar Contraseña
+                                </Button>
                             </Grid>
                         </Grid>
-                    </Box>
-                    <Copyright sx={{ mt: 5 }} />
-                </Box>
-            </Container>
-        </Fragment >
+                    </Grid>
+                </Grid>
+            </Box>
+        </FormWrapper >
     )
 }
 

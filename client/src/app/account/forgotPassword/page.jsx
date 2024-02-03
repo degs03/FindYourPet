@@ -1,15 +1,12 @@
 'use client'
 
-import { Avatar, Box, Button, Container, Grid, TextField, Typography } from "@mui/material";
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import Link from "next/link";
 import axios from "axios";
 import Swal from 'sweetalert2';
+import FormWrapper from "@/components/FormWrapper/page";
 
-const { Fragment, useState, useEffect } = require("react")
-
-
-
+const { useState, useEffect } = require("react")
 
 const forgotPassword = () => { //preset trae data
     const [email, setEmail] = useState("");
@@ -54,77 +51,75 @@ const forgotPassword = () => { //preset trae data
     useEffect(() => {
         setError({});
     }, [email]);
-    const Copyright = (value) => {
-        return (
-            <Typography variant="body2" color="text.secondary" align="center" {...value}>
-                {'Copyright © '}
-                <Link color="inherit" href="/">
-                    FindYourPet
-                </Link>{' '}
-                {new Date().getFullYear()}
-                {'.'}
-            </Typography>
-        );
-    }
+
     return (
-        <Fragment>
-            <Container component="main" maxWidth="xs">{/**Coloca como un componente MAIN y lo dejo su maxWidth a xs O 12 */}
-                <Box
-                    sx={{
-                        marginTop: 8,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                    }}
-                >
-                    <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
-                        <LockOutlinedIcon />
-                    </Avatar>
-                    <Typography component="h1" variant="h5">
-                        Recupera tu contraseña!
-                    </Typography>
-                    <Box component="form" noValidate sx={{ mt: 3 }}>{/*mt = margin bottom */}
-                        <Grid container spacing={2}>
-                            <Grid item xs={12} >
-                                <TextField
-                                    required
-                                    name="email"
-                                    label="E-mail"
+        <FormWrapper>
+            <Typography component="h1" variant="h5" color="#4b3a2e">
+                Recupera tu contraseña!
+            </Typography>
+            <Box component="form" noValidate sx={{ mt: 3 }}>{/*mt = margin bottom */}
+                <Grid container spacing={2}>
+                    <Grid item xs={12} >
+                        <TextField
+                            required
+                            name="email"
+                            label="E-mail"
+                            fullWidth
+                            sx={{
+                                backgroundColor: 'rgba(248, 248, 248, 0.507)',
+                                '& label.Mui-focused': {
+                                    color: '#4b3a2e'
+                                },
+                                '& .MuiOutlinedInput-root': {
+                                    '&.Mui-focused fieldset': {
+                                        borderColor: '#4b3a2e'
+                                    }
+                                }
+                            }}
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            error={error?.email ? true : false}
+                            helperText={error?.email?.message}
+                        />
+                    </Grid>
+                    <Grid container justifyContent="flex-end">
+                        <Grid item>
+                            <Grid item xs={12}>
+                                <Button
+                                    type="submit"
                                     fullWidth
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    error={error?.email ? true : false}
-                                    helperText={error?.email?.message}
-                                />
-                            </Grid>
-                            <Grid container justifyContent="flex-end">
-                                <Grid item>
-                                    <Grid item xs={12}>
-                                        <Button
-                                            type="submit"
-                                            fullWidth
-                                            variant="contained"
-                                            sx={{ mt: 3, mb: 2 }}
-                                            onClick={handleFormSubmit}
-                                        >
-                                            Enviar email
-                                        </Button>
-                                    </Grid>
-                                </Grid>
+                                    variant="contained"
+                                    sx={{
+                                        mb: 3, mt: 3,
+                                        backgroundColor: "#8a6c54",
+                                        '&:hover': {
+                                            backgroundColor: "#6b5543",
+                                        }
+                                    }}
+                                    onClick={handleFormSubmit}
+                                >
+                                    Enviar email
+                                </Button>
                             </Grid>
                         </Grid>
-                        <Grid container justifyContent="flex-end">
-                            <Grid item>
-                                <Link href="/account/register" variant="body2">
-                                    Volver a inicio
-                                </Link>
-                            </Grid>
-                        </Grid>
-                    </Box>
-                    <Copyright sx={{ mt: 5 }} />
-                </Box>
-            </Container>
-        </Fragment >
+                    </Grid>
+                </Grid>
+                <Grid container justifyContent="flex-end">
+                    <Grid item>
+                        <Link 
+                        href="/account/login" 
+                        variant="body2"
+                        style={{
+                            textDecoration: 'none',
+                            boxShadow: 'none',
+                            color: '#c23502'}}
+                        >
+                            Volver a inicio
+                        </Link>
+                    </Grid>
+                </Grid>
+            </Box>
+        </FormWrapper >
     )
 }
 
