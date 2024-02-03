@@ -11,7 +11,7 @@ module.exports.findAllPosts = async (req, res) => {
     }
 };
 module.exports.findPost = async (req, res) => {
-    const {id}= req.params;
+    const { id } = req.params;
     try {
         const post = await Post.findOne({ _id: id }).populate("user");
         if (post) {
@@ -31,14 +31,14 @@ module.exports.createPost = async (req, res) => {
         const newPost = await Post.create(req.body);
         res.status(201);
         res.json(newPost);
-        console.log("se ha creado exitosamente!")
+        console.log("se ha creado exitosamente!");
     } catch (error) {
         res.status(500);
         res.json({ error: error });
     }
 };
 module.exports.updatePost = async (req, res) => {
-    const {id}= req.params;
+    const { id } = req.params;
     try {
         const updatedPost = await Post.findOneAndUpdate({ _id: id }, req.body, { new: true, runValidators: true });
         res.status(200);
@@ -49,7 +49,7 @@ module.exports.updatePost = async (req, res) => {
         res.json({ error: error });
     }
 };
-module.exports.deletePost= async (req, res) => {
+module.exports.deletePost = async (req, res) => {
     try {
         const deletedPost = await Post.deleteOne({ _id: req.params.id });
         res.status(200);

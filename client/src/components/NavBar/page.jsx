@@ -14,16 +14,21 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import '@fontsource/walter-turncoat';
 import '@fontsource/roboto';
-    
+import { useCookies } from 'next-client-cookies';
+import Swal from 'sweetalert2';
+import Link from 'next/link';
 const pages = ['Todas las publicaciones', 'Agregar publicación'];
 const settings = ['Perfil', 'Cerrar sesión'];
-const settingsLogin = ['Iniciar sesión'];
+/* const settingsLogin = ['Iniciar sesión']; */
 const href = ['/posts', '/posts/new'];
 
 const NavBar = () => {
+    const cookies = useCookies();
     const [anchorElNav, setAnchorElNav] = useState(null);
     const [anchorElUser, setAnchorElUser] = useState(null);
-
+    // Leer una cookie
+    const miCookie = cookies.get('userToken');
+    console.log({ cookie: miCookie });
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
     };
@@ -90,19 +95,41 @@ const NavBar = () => {
                         >
                             {pages.map((page, idx) => (
                                 <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                    <Typography
-                                        href={href[idx]}
-                                        component="a"
-                                        variant="body2"
+                                    <Link key={page}
                                         sx={{
+                                            textDecoration: 'none',
                                             my: 2, mx: 1,
-                                            color: '#F05D23',
-                                            display: 'block',
-                                            textDecoration: 'none'
+                                            fontFamily: 'Roboto, sans-serif',
+                                            fontWeight: 400,
                                         }}
+                                        href={href[idx]}
                                     >
-                                        {page}
-                                    </Typography>
+                                        <Button
+                                            sx={{
+                                                textTransform: 'none',
+                                                color: '#F05D23'
+                                            }}
+                                            onClick={() => {
+                                                handleCloseNavMenu();
+                                                !miCookie ?
+                                                    Swal.fire({
+                                                        toast: true,
+                                                        icon: "error",
+                                                        iconColor: "white",
+                                                        position: "bottom",
+                                                        color: "white",
+                                                        title: "Inicia sesion para crear un post!",
+                                                        background: "#f27474",
+                                                        showConfirmButton: false,
+                                                        timer: 5000,
+                                                        timerProgressBar: true,
+                                                    }) : null
+                                            }
+                                            }
+                                        >
+                                            {page}
+                                        </Button>
+                                    </Link>
                                 </MenuItem>
                             ))}
                         </Menu>
@@ -127,20 +154,41 @@ const NavBar = () => {
                     </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         {pages.map((page, idx) => (
-                            <Button key={page}
-                                    onClick={handleCloseNavMenu}
-                                    href={href[idx]}
+                            <Link key={page}
+                                sx={{
+                                    textDecoration: 'none',
+                                    my: 2, mx: 1,
+                                    fontFamily: 'Roboto, sans-serif',
+                                    fontWeight: 400,
+                                }}
+                                href={href[idx]}
+                            >
+                                <Button
                                     sx={{
-                                        my: 2, mx: 1,
-                                        color: '#F05D23',
-                                        fontFamily: 'Roboto, sans-serif',
-                                        fontWeight: 400,
-                                        textTransform: 'unset',
-                                        display: 'block'
+                                        textTransform: 'none',
+                                        color: '#F05D23'
                                     }}
+                                    onClick={() => {
+                                        handleCloseNavMenu();
+                                        !miCookie ?
+                                            Swal.fire({
+                                                toast: true,
+                                                icon: "error",
+                                                iconColor: "white",
+                                                position: "bottom",
+                                                color: "white",
+                                                title: "Inicia sesion para crear un post!",
+                                                background: "#f27474",
+                                                showConfirmButton: false,
+                                                timer: 5000,
+                                                timerProgressBar: true,
+                                            }) : null
+                                    }
+                                    }
                                 >
                                     {page}
-                            </Button>
+                                </Button>
+                            </Link>
                         ))}
                     </Box>
                     <Box sx={{ flexGrow: 0 }}>

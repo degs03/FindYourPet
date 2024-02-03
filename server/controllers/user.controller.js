@@ -43,11 +43,22 @@ module.exports.login = async (req, res) => {
         }
         //si contrrasenia ok genera jwt y cookie
         const newJWT = jwt.sign({
-            _id: user._id
+            _id: user._id,
+            firstName: user.firstName,
+            lastName: user.lastName
         }, secretKey, { expiresIn: "10m" });
         res.cookie("userToken", newJWT, secretKey, { httpOnly: true });
         res.status(200);
-        res.json({ message: "logged ok" })
+        res.json(
+            {
+                message: "logged ok",
+                usuario:
+                {
+                    _id: user._id,
+                    firstName: user.firstName,
+                    lastName: user.lastName
+                }
+            })
     } catch (error) {
         res.status(500);
         res.json({ message: error });
@@ -66,7 +77,7 @@ module.exports.cookie = async (req, res) => {
 module.exports.loggout = async (req, res) => {
     try {
         res.clearCookie("userToken");
-        res.json({ message: "logout succesful" });
+        res.json({ message: "logout succesfully" });
         res.status(200);
     } catch (error) {
         res.json({ message: error });
@@ -114,7 +125,7 @@ module.exports.resetPassword = async (req, res) => {
         const token = crypto.createHash('sha256').update(req.params.token).digest('hex');
         console.log('Token:', token);
         console.log('Date:', date);
-        const user = await User.findOne({ passwordResetToken: token, passwordResetTokenExpire: {$gt: date}});
+        const user = await User.findOne({ passwordResetToken: token, passwordResetTokenExpire: { $gt: date } });
         console.error(user);
         if (!user) {
             return res.status(404).json({ message: "El link es invalido o ha expirado!" });
