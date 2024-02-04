@@ -1,11 +1,11 @@
 "use client"
 import React, { useRef, useEffect, useState } from 'react';
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
+import ReactDOM from 'react-dom';
 import styles from './page.module.css';
 import axios from 'axios';
-import ReactDOMServer from 'react-dom/server';
-import PetsIcon from '@mui/icons-material/Pets';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import { Avatar, Button } from '@mui/material';
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_API_KEY;
 
 const Map = () => {
@@ -46,6 +46,24 @@ const Map = () => {
             setLat(map.current.getCenter().lat.toFixed(4));
             setZoom(map.current.getZoom().toFixed(2));
         });
+        map.current.addControl(
+            new mapboxgl.GeolocateControl({
+                positionOptions: {
+                    enableHighAccuracy: true
+                },
+                trackUserLocation: true
+            })
+        );
+        navigator.geolocation.getCurrentPosition((position) => {
+            // Crea un nuevo elemento DOM
+            const el = document.createElement('div');
+            // Renderiza el botón de Material-UI dentro del elemento DOM
+            ReactDOM.render(<Avatar sx={{ backgroundColor:'#F05D41' }}/>, el);
+            // Usa el elemento DOM como marcador
+            new mapboxgl.Marker(el)
+                .setLngLat([position.coords.longitude, position.coords.latitude])
+                .addTo(map.current);
+        });
 
         // La funcion 'load' espera a que el mapa esté cargado antes de llamar a getLocation
         map.current.on('load', getLocation);
@@ -57,10 +75,13 @@ const Map = () => {
         if (posts && map.current) {
             // Muestra el marcador en la ubicación proporcionada
             posts.map((item) => {
-                 // Crear un nuevo elemento DOM
+                // Crear un nuevo elemento DOM
                 const el = document.createElement('div');
-                // Renderizar el icono de React en el elemento DOM como HTML estático
-                el.innerHTML = ReactDOMServer.renderToString(<PetsIcon />);
+                el.style.backgroundImage = `url(${item.image[0]})`;
+                el.style.backgroundSize = 'cover';
+                el.style.width = '35px';
+                el.style.height = '35px';
+                el.style.borderRadius = '50%';
                 new mapboxgl.Marker(el)
                     .setLngLat(
                         [
@@ -75,9 +96,6 @@ const Map = () => {
 
     return (
         <div>
-            <div className={styles.sidebar}>
-                Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
-            </div>
             <div ref={mapContainer} style={{ height: "100vh" }} />
         </div>
     )
