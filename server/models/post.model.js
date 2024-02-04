@@ -46,7 +46,7 @@ const PostSchema = new mongoose.Schema({
         required:[true, "La ubicación es obligatoria."],
     },
     image: {
-        type: String,
+        type: Array,
         required:[true, "La imagen es obligatoria."]
     },
     status: {

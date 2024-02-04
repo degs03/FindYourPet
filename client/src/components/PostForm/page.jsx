@@ -9,13 +9,16 @@ import bg from '/public/images/postBackground.png';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { Map, Marker, GeolocateControl } from "react-map-gl";
 import Image from "next/image";
+import { usePostContext } from "../../app/context/PostContext";
 
 const PostForm = ({ onSubmit, preset = {} }) => {
     const router = useRouter();
+    const { downloadURLs } = usePostContext();
     const [error, setError] = useState({});
     const [title, setTitle] = useState("");
     const [name, setName] = useState("");
     const [age, setAge] = useState("");
+    const [ageType, setAgeType] = useState("años");
     const [species, setSpecies] = useState("");
     const [breed, setBreed] = useState("");
     const [description, setDescription] = useState("");
@@ -60,16 +63,17 @@ const PostForm = ({ onSubmit, preset = {} }) => {
         }
     }
     const handleFormSubmit = (e) => {
-        e.preventDefault()
+        e.preventDefault();
+        let fullAge= age + " " + ageType;
         const data = {
             title: title,
             name: name,
-            age: age,
+            age: fullAge,
             species: species,
             breed: breed,
             description: description,
             location: location,
-            image: image,
+            image: downloadURLs,
         }
         onSubmit(data, createdOk, createdFail);
     }
@@ -234,16 +238,18 @@ const PostForm = ({ onSubmit, preset = {} }) => {
                                         />
                                         <TextField
                                             select
-                                            defaultValue="Años"
+                                            label="Seleccione el tiempo"
                                             fullWidth
+                                            value={ageType}
+                                            onChange={(e) => setAgeType(e.target.value)}
                                         >
-                                            <MenuItem value="Años">
+                                            <MenuItem value="años">
                                                 Años
                                             </MenuItem>
-                                            <MenuItem value="Meses">
+                                            <MenuItem value="meses">
                                                 Meses
                                             </MenuItem>
-                                            <MenuItem value="Semanas">
+                                            <MenuItem value="semanas">
                                                 Semanas
                                             </MenuItem>
                                         </TextField>

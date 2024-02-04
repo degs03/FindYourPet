@@ -7,30 +7,29 @@ import { db, storage } from '@/firebase/config';
 import { addDoc, collection, serverTimestamp, updateDoc, doc, arrayUnion } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { Button } from '@mui/material';
+import { usePostContext } from '../../app/context/PostContext';
 
 const Dropzone = () => {
     const [files, setFiles] = useState([]);
+    const { setDownloadURLs } = usePostContext();
+
     const uploadPost = async () => {
-        // Crea un nuevo documento en la colección "posts"
         const docRef = await addDoc(collection(db, "posts"), {
             timestamp: serverTimestamp()
         });
-        // Espera a que todas las imágenes se hayan subido antes de continuar
+        let downloadURLs = [];
         await Promise.all(
-            files.map(image => {
-                // Crea una referencia a un lugar en Firebase Storage donde se subirá la imagen
+            files.map(async image => {
                 const imageRef = ref(storage, `posts/${docRef.id}/${image.path}`);
-                // Sube la imagen a Firebase Storage
-                uploadBytes(imageRef, image, "data_url").then(async () => {
-                    // Obtiene la URL de descarga una vez que la imagen se ha subido
-                    const downloadURL = await getDownloadURL(imageRef);
-                    // Actualiza el documento en Firebase Firestore para incluir la URL de descarga de la imagen
-                    await updateDoc(doc(db, "posts", docRef.id), {
-                        images: arrayUnion(downloadURL)
-                    });
+                await uploadBytes(imageRef, image, "data_url");
+                const downloadURL = await getDownloadURL(imageRef);
+                await updateDoc(doc(db, "posts", docRef.id), {
+                    images: arrayUnion(downloadURL)
                 });
+                downloadURLs.push(downloadURL);
             })
         );
+        setDownloadURLs(downloadURLs);
         setFiles([]);
     };
 
