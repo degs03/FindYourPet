@@ -4,11 +4,9 @@ import { Box, Button, Container, Grid, MenuItem, TextField, Typography, Stepper,
 import { useRouter } from "next/navigation";
 import { Fragment, useEffect, useState } from "react";
 import PetsSharpIcon from '@mui/icons-material/PetsSharp';
-import bg from '/public/images/postBackground.png';
 // mapBox imports
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { Map, Marker, GeolocateControl } from "react-map-gl";
-import Image from "next/image";
 import { usePostContext } from "../../app/context/PostContext";
 
 const PostForm = ({ onSubmit, preset = {} }) => {
@@ -22,7 +20,7 @@ const PostForm = ({ onSubmit, preset = {} }) => {
     const [species, setSpecies] = useState("");
     const [breed, setBreed] = useState("");
     const [description, setDescription] = useState("");
-    const [location, setLocation] = useState({});
+    const [location, setLocation] = useState([]);
     const [image, setImage] = useState("");
     const [viewport, setViewport] = useState({}); // se van a guardar la ubicacion actual latitud y longitud
 
@@ -64,17 +62,18 @@ const PostForm = ({ onSubmit, preset = {} }) => {
     }
     const handleFormSubmit = (e) => {
         e.preventDefault();
-        let fullAge= age + " " + ageType;
+        let fullAge = age + " " + ageType;
         const data = {
             title: title,
             name: name,
-            age: fullAge,
+            age: age !== "" ? fullAge : age,
             species: species,
             breed: breed,
             description: description,
-            location: location,
-            image: downloadURLs,
+            location: location.length === 0 ? null : location,
+            image: downloadURLs == "" ? null : downloadURLs,
         }
+        console.log(data.location)
         onSubmit(data, createdOk, createdFail);
     }
     useEffect(() => {
@@ -100,7 +99,10 @@ const PostForm = ({ onSubmit, preset = {} }) => {
     //--------------------------MAPBOX-------------------------------->
     //Mediante el evento, quita longitud y latitud donde se clickeo
     const handleLocation = (e) => {
-        setLocation(e.lngLat);
+        setLocation({
+            lng: e.lngLat.lng,
+            lat: e.lngLat.lat
+        });
     }
 
     useEffect(() => {
@@ -165,219 +167,216 @@ const PostForm = ({ onSubmit, preset = {} }) => {
 
     return (
         <Fragment>
-            <Image
-                src={bg}
-                alt="background"
-                fill
-                style={{
-                    objectFit: 'cover',
-                    zIndex: -1
-                }} />
-            <Container component="main" maxWidth="lg">
-                <Stepper activeStep={activeStep} sx={{ mt: 2 }}>
-                    {steps.map((label) => {
-                        const stepProps = {};
-                        const labelProps = {};
-                        return (
-                            <Step key={label} {...stepProps} sx={{ mb: 5 }}>
-                                <StepLabel {...labelProps} sx={{ mt: 5 }}>{label}</StepLabel>
-                            </Step>
-                        );
-                    })}
-                </Stepper>
-                {activeStep === steps.length ? (
-                    <Fragment>
-                        <Typography sx={{ mt: 2, mb: 1 }}>
-                            All steps completed - you&apos;re finished
-                        </Typography>
-                        <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-                            <Box sx={{ flex: '1 1 auto' }} />
-                            <Button onClick={handleReset}>Reset</Button>
-                        </Box>
-                    </Fragment>
-                ) : (
-                    <Fragment>
-                        {activeStep === 0 &&
-                            <Box component="form" noValidate>
-                                <Grid container spacing={2}>
-                                    <Grid item xs={12} >
-                                        <TextField
-                                            required
-                                            name="title"
-                                            label="Título"
-                                            fullWidth
-                                            value={title}
-                                            onChange={(e) => setTitle(e.target.value)}
-                                            error={error?.title ? true : false}
-                                            helperText={error?.title?.message}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12} sx={{ display: "flex" }} >
-                                        <TextField
-                                            required
-                                            name="name"
-                                            label="Nombre de la mascota"
-                                            fullWidth
-                                            value={name}
-                                            onChange={(e) => setName(e.target.value)}
-                                            error={error?.name ? true : false}
-                                            helperText={error?.name?.message}
-                                            sx={{ mr: 2 }}
-                                        />
-                                        <TextField
-                                            required
-                                            name="age"
-                                            label="Edad"
-                                            fullWidth
-                                            type="number"
-                                            value={age}
-                                            onChange={(e) => setAge(e.target.value)}
-                                            error={error?.age ? true : false}
-                                            helperText={error?.age?.message}
-                                            sx={{ mr: 2 }}
-                                        />
-                                        <TextField
-                                            select
-                                            label="Seleccione el tiempo"
-                                            fullWidth
-                                            value={ageType}
-                                            onChange={(e) => setAgeType(e.target.value)}
-                                        >
-                                            <MenuItem value="años">
-                                                Años
-                                            </MenuItem>
-                                            <MenuItem value="meses">
-                                                Meses
-                                            </MenuItem>
-                                            <MenuItem value="semanas">
-                                                Semanas
-                                            </MenuItem>
-                                        </TextField>
-                                    </Grid>
-                                    <Grid item xs={12} sx={{ display: "flex" }} >
-                                        <TextField
-                                            required
-                                            name="species"
-                                            label="Especie"
-                                            fullWidth
-                                            value={species}
-                                            onChange={(e) => setSpecies(e.target.value)}
-                                            error={error?.species ? true : false}
-                                            helperText={error?.species?.message}
-                                            sx={{ mr: 2 }}
-                                        />
-                                        <TextField
-                                            required
-                                            name="breed"
-                                            label="Raza"
-                                            fullWidth
-                                            value={breed}
-                                            onChange={(e) => setBreed(e.target.value)}
-                                            error={error?.breed ? true : false}
-                                            helperText={error?.breed?.message}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12} >
-                                        <TextField
-                                            required
-                                            name="description"
-                                            label="Descripción"
-                                            fullWidth
-                                            multiline
-                                            value={description}
-                                            onChange={(e) => setDescription(e.target.value)}
-                                            error={error?.description ? true : false}
-                                            helperText={error?.description?.message}
-                                            rows={4}
-                                        />
-                                    </Grid>
-                                </Grid>
-                            </Box>
-                        }
-                        {activeStep === 1 &&
-                            <Grid item xs={12} >
-                                <Dropzone />
-                            </Grid>
-                        }
-                        {activeStep === 2 &&
-                            //Pregunta si existe la latitud y longitud
-                            viewport.latitude && viewport.longitude && (
-                                <Grid item xs={12} sx={{ height: "60vh" }} >
-                                    <Map
-                                        mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_API_KEY}
-                                        attributionControl={false}
-                                        initialViewState={viewport} //inserta como valores iniciales lo asignado a viewport
-                                        onClick={handleLocation}
-                                        mapStyle='mapbox://styles/mapbox/streets-v12'
-                                    >
-                                        <GeolocateControl
-                                            positionOptions={{ enableHighAccuracy: true }}
-                                            trackUserLocation={true}
-                                        />
+            <Container component="main" maxWidth="xl">
+                <Box sx={{ padding: 5 }}>
+                    <Stepper activeStep={activeStep} sx={{ mt: 3, mb: 7 }}>
+                        {steps.map((label) => {
+                            const stepProps = {};
+                            const labelProps = {};
+                            return (
+                                <Step
+                                    key={label}
+                                    {...stepProps}
+                                    sx={{
+                                        '& .MuiStepLabel-root .Mui-completed': {
+                                            color: '#F4AFAB', // circle color (COMPLETED)
+                                        },
+                                        '& .MuiStepLabel-label.Mui-completed.MuiStepLabel-alternativeLabel':
                                         {
-                                            location.lat && location.lng ?
-                                                <Marker
-                                                    latitude={location.lat}
-                                                    longitude={location.lng}
-                                                >
-                                                    <PetsSharpIcon />
-                                                </Marker> : null
-                                        }
-                                    </Map>
-                                </Grid>
-                            )
-                        }
-                        <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-                            <Button
-                                color="inherit"
-                                disabled={activeStep === 0}
-                                onClick={handleBack}
-                                sx={{ mr: 1 }}
-                            >
-                                Back
-                            </Button>
-                            <Box sx={{ flex: '1 1 auto' }} />
-                            {activeStep === steps.length - 1 ?
-                                <Grid container justifyContent="flex-end">
-                                    <Grid item>
-                                        <Grid item xs={12} sx={{ mt: 2 }}>
-                                            <Button
-                                                type="submit"
+                                            color: '#F4AFAB', // Just text label (COMPLETED)
+                                        },
+                                        '& .MuiStepLabel-root .Mui-active': {
+                                            color: '#F4CBC6', // circle color (ACTIVE)
+                                        },
+                                        '& .MuiStepLabel-label.Mui-active.MuiStepLabel-alternativeLabel':
+                                        {
+                                            color: '#F4AFAB', // Just text label (ACTIVE)
+                                        },
+                                        '& .MuiStepLabel-root .Mui-active .MuiStepIcon-text': {
+                                            fill: 'white', // circle's number (ACTIVE)
+                                        },
+                                    }}>
+                                    <StepLabel {...labelProps}>{label}</StepLabel>
+                                </Step>
+                            );
+                        })}
+                    </Stepper>
+                    {activeStep === steps.length ? (
+                        <Fragment>
+                            <Typography sx={{ mt: 2, mb: 1 }}>
+                                All steps completed - you&apos;re finished
+                            </Typography>
+                            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+                                <Box sx={{ flex: '1 1 auto' }} />
+                                <Button onClick={handleReset}>Reset</Button>
+                            </Box>
+                        </Fragment>
+                    ) : (
+                        <Fragment>
+                            {activeStep === 0 &&
+                                <Box component="form" noValidate>
+                                    <Grid container spacing={2}>
+                                        <Grid item xs={12} >
+                                            <TextField
+                                                required
+                                                name="title"
+                                                label="Título"
                                                 fullWidth
-                                                variant="contained"
-                                                sx={{ mt: 3, mb: 2 }}
-                                                onClick={handleFormSubmit}
+                                                value={title}
+                                                onChange={(e) => setTitle(e.target.value)}
+                                                error={error?.title ? true : false}
+                                                helperText={error?.title?.message}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12} sx={{ display: "flex" }} >
+                                            <TextField
+                                                required
+                                                name="name"
+                                                label="Nombre de la mascota"
+                                                fullWidth
+                                                value={name}
+                                                onChange={(e) => setName(e.target.value)}
+                                                error={error?.name ? true : false}
+                                                helperText={error?.name?.message}
+                                                sx={{ mr: 2 }}
+                                            />
+                                            <TextField
+                                                required
+                                                name="age"
+                                                label="Edad"
+                                                fullWidth
+                                                type="number"
+                                                value={age}
+                                                onChange={(e) => setAge(e.target.value)}
+                                                error={error?.age ? true : false}
+                                                helperText={error?.age?.message}
+                                                sx={{ mr: 2 }}
+                                            />
+                                            <TextField
+                                                select
+                                                label="Seleccione el tiempo"
+                                                fullWidth
+                                                value={ageType}
+                                                onChange={(e) => setAgeType(e.target.value)}
                                             >
-                                                Publicar
-                                            </Button>
+                                                <MenuItem value="años">
+                                                    Años
+                                                </MenuItem>
+                                                <MenuItem value="meses">
+                                                    Meses
+                                                </MenuItem>
+                                                <MenuItem value="semanas">
+                                                    Semanas
+                                                </MenuItem>
+                                            </TextField>
+                                        </Grid>
+                                        <Grid item xs={12} sx={{ display: "flex" }} >
+                                            <TextField
+                                                required
+                                                name="species"
+                                                label="Especie"
+                                                fullWidth
+                                                value={species}
+                                                onChange={(e) => setSpecies(e.target.value)}
+                                                error={error?.species ? true : false}
+                                                helperText={error?.species?.message}
+                                                sx={{ mr: 2 }}
+                                            />
+                                            <TextField
+                                                required
+                                                name="breed"
+                                                label="Raza"
+                                                fullWidth
+                                                value={breed}
+                                                onChange={(e) => setBreed(e.target.value)}
+                                                error={error?.breed ? true : false}
+                                                helperText={error?.breed?.message}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12} >
+                                            <TextField
+                                                required
+                                                name="description"
+                                                label="Descripción"
+                                                fullWidth
+                                                multiline
+                                                value={description}
+                                                onChange={(e) => setDescription(e.target.value)}
+                                                error={error?.description ? true : false}
+                                                helperText={error?.description?.message}
+                                                rows={4}
+                                            />
                                         </Grid>
                                     </Grid>
+                                </Box>
+                            }
+                            {activeStep === 1 &&
+                                <Grid item xs={12} >
+                                    <Dropzone />
                                 </Grid>
-                                :
-                                <Button onClick={handleNext}>Next</Button>}
-                        </Box>
-                    </Fragment>
-                )}
-                {/*
-            <Container component="main" maxWidth="lg">
-                <Box sx={{ mt: 8 }}>
-                    <Box component="form" noValidate>
-                        <Grid container justifyContent="flex-end">
-                            <Grid item>
-                                <Grid item xs={12} sx={{ mt: 2 }}>
+                            }
+                            {activeStep === 2 &&
+                                //Pregunta si existe la latitud y longitud
+                                viewport.latitude && viewport.longitude && (
+                                    <Grid item xs={12} sx={{ height: "55vh" }} >
+                                        <Map
+                                            mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_API_KEY}
+                                            attributionControl={false}
+                                            initialViewState={viewport} //inserta como valores iniciales lo asignado a viewport
+                                            onClick={handleLocation}
+                                            mapStyle='mapbox://styles/mapbox/streets-v12'
+                                        >
+                                            <GeolocateControl
+                                                positionOptions={{ enableHighAccuracy: true }}
+                                                trackUserLocation={true}
+                                            />
+                                            {
+                                                location.lat && location.lng ?
+                                                    <Marker
+                                                        latitude={location.lat}
+                                                        longitude={location.lng}
+                                                    >
+                                                        <PetsSharpIcon />
+                                                    </Marker> : null
+                                            }
+                                        </Map>
+                                    </Grid>
+                                )
+                            }
+                            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+                                <Button
+                                    color="inherit"
+                                    disabled={activeStep === 0}
+                                    onClick={handleBack}
+                                >
+                                    Back
+                                </Button>
+                                <Box sx={{ flex: '1 1 auto' }} />
+                                {activeStep === steps.length - 1 ?
+                                    <Grid container justifyContent="flex-end">
+                                        <Grid item>
+                                            <Grid item xs={12}>
+                                                <Button
+                                                    type="submit"
+                                                    fullWidth
+                                                    variant="contained"
+                                                    sx={{ mt: 3, mb: 2 }}
+                                                    onClick={handleFormSubmit}
+                                                >
+                                                    Publicar
+                                                </Button>
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
+                                    :
                                     <Button
-                                        type="submit"
-                                        fullWidth
-                                        variant="contained"
-                                        sx={{ mt: 3, mb: 2 }}
-                                        onClick={handleFormSubmit}
-                                    >
-                                        Publicar
-                                    </Button>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                    </Box>*/}
+                                        onClick={handleNext}>
+                                        Next
+                                    </Button>}
+                            </Box>
+                        </Fragment>
+                    )}
+                </Box>
             </Container>
         </Fragment >
     )

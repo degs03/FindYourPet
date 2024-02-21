@@ -1,11 +1,10 @@
 "use client"
 import React, { useRef, useEffect, useState } from 'react';
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
-import ReactDOM from 'react-dom';
-import styles from './page.module.css';
+import { createRoot } from 'react-dom/client';
 import axios from 'axios';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { Avatar, Button } from '@mui/material';
+import { Avatar} from '@mui/material';
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_API_KEY;
 
 const Map = () => {
@@ -58,7 +57,8 @@ const Map = () => {
             // Crea un nuevo elemento DOM
             const el = document.createElement('div');
             // Renderiza el botón de Material-UI dentro del elemento DOM
-            ReactDOM.render(<Avatar sx={{ backgroundColor:'#F05D41' }}/>, el);
+            const root = createRoot(el);
+            root.render(<Avatar sx={{ backgroundColor: '#F05D41' }} />);
             // Usa el elemento DOM como marcador
             new mapboxgl.Marker(el)
                 .setLngLat([position.coords.longitude, position.coords.latitude])
@@ -77,18 +77,13 @@ const Map = () => {
             posts.map((item) => {
                 // Crear un nuevo elemento DOM
                 const el = document.createElement('div');
-                el.style.backgroundImage = `url(${item.image[0]})`;
+                el.style.backgroundImage = `url("${item.image[0]}")`;
                 el.style.backgroundSize = 'cover';
                 el.style.width = '35px';
                 el.style.height = '35px';
                 el.style.borderRadius = '50%';
                 new mapboxgl.Marker(el)
-                    .setLngLat(
-                        [
-                            item.location?.lng,
-                            item.location?.lat
-                        ]
-                    )
+                    .setLngLat([item.location[0].lng, item.location[0].lat])
                     .addTo(map.current);//agrega los marcadores al mapa actual
             });
         }

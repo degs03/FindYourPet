@@ -1,5 +1,5 @@
-
 'use client'
+
 import { useEffect, useState } from 'react';
 import axios from "axios";
 import {  Card, CardActions, CardContent, CardMedia, Container, Grid, ImageList, ImageListItem, Typography } from '@mui/material';
@@ -24,11 +24,11 @@ export default function Posts() {
 
     return (
         <Fragment>
-            <Container sx={{ py: 8 }} maxWidth="md">
+            <Container sx={{ py: 8 }} maxWidth="lg">
                 {/* End hero unit */}
-                <Grid container spacing={4}>
+                <Grid container spacing={2}>
                     {posts.map((card) => (
-                        <Grid item key={card} xs={12} sm={12} >
+                        <Grid item key={card} xs={12} sm={6}>
                             <Card
                                 sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
                             >

@@ -9,7 +9,6 @@ import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import '@fontsource/walter-turncoat';
@@ -42,7 +41,7 @@ const NavBar = () => {
         setAnchorElUser(null);
     };
     return (
-        <AppBar position="static" sx={{ backgroundColor: '#E4E6C3', paddingTop: 1 }} >
+        <AppBar position="static" sx={{ backgroundColor: 'transparent', paddingTop: 1, boxShadow: 'none' }} >
             <Container maxWidth="xl">
                 <Toolbar disableGutters >
                     <Typography
@@ -51,20 +50,20 @@ const NavBar = () => {
                         component="a"
                         href="/"
                         sx={{
-                            mr: 1.5,
+                            mr: 2,
                             mb: 0.9,
                             display: { xs: 'none', md: 'flex' },
                             fontFamily: 'Walter Turncoat, sans-serif',
                             fontSize: '2rem',
                             fontWeight: 800,
                             letterSpacing: '.1rem',
-                            color: '#F05D23',
+                            color: '#3B3561',
                             textDecoration: 'none'
                         }}
                     >
                         FindYourPet
                     </Typography>
-                    <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none', color: '#F05D23' } }}>
+                    <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none', color: '#3B3561' } }}>
                         <IconButton
                             size="large"
                             aria-label="account of current user"
@@ -96,39 +95,33 @@ const NavBar = () => {
                             {pages.map((page, idx) => (
                                 <MenuItem key={page} onClick={handleCloseNavMenu}>
                                     <Link key={page}
-                                        sx={{
+                                        style={{
+                                            fontFamily: 'Roboto, sans-serif', 
                                             textDecoration: 'none',
-                                            my: 2, mx: 1,
-                                            fontFamily: 'Roboto, sans-serif',
                                             fontWeight: 400,
+                                            color: '#3B3561',
+                                            my: 2
                                         }}
                                         href={href[idx]}
+                                        onClick={() => {
+                                            handleCloseNavMenu();
+                                            idx == 1 && !miCookie ?
+                                                Swal.fire({
+                                                    toast: true,
+                                                    icon: "error",
+                                                    iconColor: "white",
+                                                    position: "bottom",
+                                                    color: "white",
+                                                    title: "Inicia sesion para crear un post!",
+                                                    background: "#f27474",
+                                                    showConfirmButton: false,
+                                                    timer: 5000,
+                                                    timerProgressBar: true,
+                                                }) : null
+                                        }
+                                        }
                                     >
-                                        <Button
-                                            sx={{
-                                                textTransform: 'none',
-                                                color: '#F05D23'
-                                            }}
-                                            onClick={() => {
-                                                handleCloseNavMenu();
-                                                !miCookie ?
-                                                    Swal.fire({
-                                                        toast: true,
-                                                        icon: "error",
-                                                        iconColor: "white",
-                                                        position: "bottom",
-                                                        color: "white",
-                                                        title: "Inicia sesion para crear un post!",
-                                                        background: "#f27474",
-                                                        showConfirmButton: false,
-                                                        timer: 5000,
-                                                        timerProgressBar: true,
-                                                    }) : null
-                                            }
-                                            }
-                                        >
-                                            {page}
-                                        </Button>
+                                        {page}
                                     </Link>
                                 </MenuItem>
                             ))}
@@ -146,48 +139,42 @@ const NavBar = () => {
                             fontFamily: 'Walter Turncoat, sans-serif',
                             fontWeight: 700,
                             letterSpacing: '.1rem',
-                            color: '#F05D23',
+                            color: '#3B3561',
                             textDecoration: 'none',
                         }}
                     >
                         FindYourPet
                     </Typography>
-                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, gap: 3, ml:1 }}>
                         {pages.map((page, idx) => (
                             <Link key={page}
-                                sx={{
+                                style={{
+                                    fontFamily: 'Roboto, sans-serif', 
                                     textDecoration: 'none',
-                                    my: 2, mx: 1,
-                                    fontFamily: 'Roboto, sans-serif',
                                     fontWeight: 400,
+                                    color: '#3B3561',
+                                    my: 2
                                 }}
                                 href={href[idx]}
+                                onClick={() => {
+                                    handleCloseNavMenu();
+                                    idx == 1 && !miCookie ?
+                                        Swal.fire({
+                                            toast: true,
+                                            icon: "error",
+                                            iconColor: "white",
+                                            position: "bottom",
+                                            color: "white",
+                                            title: "Inicia sesion para crear un post!",
+                                            background: "#f27474",
+                                            showConfirmButton: false,
+                                            timer: 5000,
+                                            timerProgressBar: true,
+                                        }) : null
+                                }
+                                }
                             >
-                                <Button
-                                    sx={{
-                                        textTransform: 'none',
-                                        color: '#F05D23'
-                                    }}
-                                    onClick={() => {
-                                        handleCloseNavMenu();
-                                        !miCookie ?
-                                            Swal.fire({
-                                                toast: true,
-                                                icon: "error",
-                                                iconColor: "white",
-                                                position: "bottom",
-                                                color: "white",
-                                                title: "Inicia sesion para crear un post!",
-                                                background: "#f27474",
-                                                showConfirmButton: false,
-                                                timer: 5000,
-                                                timerProgressBar: true,
-                                            }) : null
-                                    }
-                                    }
-                                >
-                                    {page}
-                                </Button>
+                                {page}
                             </Link>
                         ))}
                     </Box>
@@ -224,7 +211,7 @@ const NavBar = () => {
                                 onClick={handleCloseUserMenu}
                                 sx={{
                                     my: 2, mx: 1,
-                                    color: '#F05D23',
+                                    color: '#3B3561',
                                     display: 'block',
                                     textDecoration: 'none'
                                 }}
@@ -238,7 +225,7 @@ const NavBar = () => {
                                 onClick={handleCloseUserMenu}
                                 sx={{
                                     my: 2, mx: 1,
-                                    color: '#F05D23',
+                                    color: '#3B3561',
                                     display: 'block',
                                     textDecoration: 'none'
                                 }}
