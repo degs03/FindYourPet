@@ -2,12 +2,19 @@ const express = require('express');
 const router = express.Router();
 const UserController = require('../controllers/user.controller');
 const { authenticate } = require('../config/jwt.config');
-router.post("/new", UserController.createUser);
-router.post("/session", UserController.login);
+
+/* Recuperacion Password */
 router.post("/forgotPassword", UserController.forgotPassword);
 router.patch("/resetPassword/:token", UserController.resetPassword);
-router.delete("/session", authenticate, UserController.loggout);
-router.get("/cookie", authenticate, UserController.cookie);
-router.get("/", authenticate, UserController.findAllUsers);
+
+/* Rutas Basicas del CRUD */
+router.post("/new", UserController.createUser);
+router.get("", authenticate, UserController.findAllUsers);
 router.get("/:id", authenticate, UserController.findUserById);
+router.patch("/:id", authenticate, UserController.updateUser);
+router.delete("/:id", authenticate, UserController.deleteUser);
+
+/* Cookie */
+router.get("/cookie", authenticate, UserController.cookie);
+
 module.exports = router;

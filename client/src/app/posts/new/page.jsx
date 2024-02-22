@@ -1,14 +1,13 @@
 'use client'
 import { usePostContext } from "@/app/context/PostContext";
 import PostForm from "@/components/PostForm/page";
-import axios from "axios";
+import { createPost } from "../../api/route";
 const { Fragment  } = require("react");
 const newPosts = () => {
     const { setDownloadURLs } = usePostContext();
     const newPost = async (data, onSuccess, onFail) => {
         try {
-            const response = await axios.post(`http://localhost:8000/api/post/new`, data);
-            const result = await response.data;
+            const result = await createPost(data);
             onSuccess(result);
             setDownloadURLs([]);
         } catch (error) {

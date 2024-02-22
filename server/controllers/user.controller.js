@@ -21,6 +21,57 @@ module.exports.createUser = async (req, res) => {
         res.json({ message: error });
     }
 };
+//Buscar todos los usuarios
+module.exports.findAllUsers = async (req, res) => {
+    try {
+        const user = await User.find().populate("posts");
+        res.status(200);
+        res.json(user);
+    } catch (error) {
+        res.status(500);
+        res.json({ message: error });
+    }
+};
+//Buscar todos los usuarios por id
+module.exports.findUserById = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const user = await User.findOne({ _id: id }).populate("posts");
+        if (user) {
+            res.status(200);
+            res.json(user);
+            return;
+        }
+        res.status(404);
+        res.json({ message: "user not found" });
+    } catch (error) {
+        res.status(500);
+        res.json({ message: error });
+    }
+};
+module.exports.updateUser = async (req, res) => {
+    try {
+        const updatedUser = await User.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true, runValidators: true });
+        res.status(200);
+        res.json(updatedUser);
+    } catch (error) {
+        res.status(500);
+        res.json({ message: error });
+    }
+};
+module.exports.deleteUser = async (req, res) => {
+    try {
+        const deletedUser = await User.deleteOne({ _id: req.params.id });
+        res.status(200);
+        res.json(deletedUser);
+
+    } catch (error) {
+        res.status(500);
+        res.json({ error: error });
+    }
+};
+
+
 //Endpoint para logueo
 module.exports.login = async (req, res) => {
     try {
@@ -74,7 +125,7 @@ module.exports.cookie = async (req, res) => {
     }
 }
 //Cerrar sesion
-module.exports.loggout = async (req, res) => {
+module.exports.logout = async (req, res) => {
     try {
         res.clearCookie("userToken");
         res.json({ message: "logout succesfully" });
@@ -83,6 +134,8 @@ module.exports.loggout = async (req, res) => {
         res.json({ message: error });
     }
 }
+
+
 //FORGOT PASSWORD
 module.exports.forgotPassword = async (req, res) => {
     const user = await User.findOne({ email: req.body.email });
@@ -147,31 +200,3 @@ module.exports.resetPassword = async (req, res) => {
         return res.status(500).json({ message: error });
     }
 }
-//Buscar todos los usuarios
-module.exports.findAllUsers = async (req, res) => {
-    try {
-        const user = await User.find().populate("posts");
-        res.status(200);
-        res.json(user);
-    } catch (error) {
-        res.status(500);
-        res.json({ message: error });
-    }
-};
-//Buscar todos los usuarios por id
-module.exports.findUserById = async (req, res) => {
-    const { id } = req.params;
-    try {
-        const user = await User.findOne({ _id: id }).populate("posts");
-        if (user) {
-            res.status(200);
-            res.json(user);
-            return;
-        }
-        res.status(404);
-        res.json({ message: "user not found" });
-    } catch (error) {
-        res.status(500);
-        res.json({ message: error });
-    }
-};

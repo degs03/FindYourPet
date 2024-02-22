@@ -5,6 +5,7 @@ import { createRoot } from 'react-dom/client';
 import axios from 'axios';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { Avatar} from '@mui/material';
+import { findAllPosts } from '@/app/api/route';
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_API_KEY;
 
 const Map = () => {
@@ -17,8 +18,7 @@ const Map = () => {
 
     const getLocation = async () => {
         try {
-            const response = await axios.get(`http://localhost:8000/api/post/all`);
-            const result = await response.data;
+            const result = await findAllPosts();
             console.log(result);
             setPosts(result)
         } catch (error) {
