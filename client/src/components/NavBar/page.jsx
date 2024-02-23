@@ -96,7 +96,7 @@ const NavBar = () => {
                                 <MenuItem key={page} onClick={handleCloseNavMenu}>
                                     <Link key={page}
                                         style={{
-                                            fontFamily: 'Roboto, sans-serif', 
+                                            fontFamily: 'Roboto, sans-serif',
                                             textDecoration: 'none',
                                             fontWeight: 400,
                                             color: '#3B3561',
@@ -145,15 +145,13 @@ const NavBar = () => {
                     >
                         FindYourPet
                     </Typography>
-                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, gap: 3, ml:1 }}>
+                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, justifyContent: 'center', gap: { sm: 1, md: 5 } }}>
                         {pages.map((page, idx) => (
                             <Link key={page}
                                 style={{
-                                    fontFamily: 'Roboto, sans-serif', 
                                     textDecoration: 'none',
+                                    my: 2, mx: 2,
                                     fontWeight: 400,
-                                    color: '#3B3561',
-                                    my: 2
                                 }}
                                 href={href[idx]}
                                 onClick={() => {

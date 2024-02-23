@@ -7,7 +7,7 @@ export default function Home() {
     return (
         <Fragment>
             <NavBar />
-            <Map />
+            <Map /> 
         </Fragment>
     );
 }
