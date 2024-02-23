@@ -3,8 +3,12 @@ import React, { useRef, useEffect, useState } from 'react';
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
 import { createRoot } from 'react-dom/client';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { Avatar} from '@mui/material';
+import { AppBar, Avatar, Badge, Box, Container, Drawer, Fab, Grid, IconButton, InputBase, Toolbar, Typography, styled} from '@mui/material';
 import { findAllPosts } from '@/app/api/route';
+import SearchIcon from '@mui/icons-material/Search';
+import * as geolib from 'geolib';
+import ClearIcon from '@mui/icons-material/Clear';
+import DrawIcon from '../icons/DrawIcon';
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_API_KEY;
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
