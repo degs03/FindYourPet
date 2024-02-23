@@ -1,9 +1,9 @@
 'use client'
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
-import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
 import Swal from 'sweetalert2';
 import FormWrapper from "@/components/FormWrapper/page";
+import { passwordReset } from "@/app/api/route";
 
 const { useState, useEffect } = require("react")
 
@@ -15,8 +15,7 @@ const resetPassword = () => {
     const { token } = useParams();
     const reset = async (data) => {
         try {
-            const response = await axios.patch(`http://localhost:8000/api/user/resetPassword/${token}`, data);
-            const result = await response.data;
+            const result = await passwordReset(data, token);
             console.log(result);
             router.push('/account/login');
             Swal.fire({

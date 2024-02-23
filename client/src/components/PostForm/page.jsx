@@ -8,9 +8,12 @@ import PetsSharpIcon from '@mui/icons-material/PetsSharp';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { Map, Marker, GeolocateControl } from "react-map-gl";
 import { usePostContext } from "../../app/context/PostContext";
+import { useAppSelector } from "@/lib/hooks";
+import { selectUser } from "@/lib/features/users/userSlice";
 
 const PostForm = ({ onSubmit, preset = {} }) => {
     const router = useRouter();
+    const currentUser = useAppSelector(selectUser);
     const { downloadURLs } = usePostContext();
     const [error, setError] = useState({});
     const [title, setTitle] = useState("");

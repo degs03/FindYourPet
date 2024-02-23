@@ -2,9 +2,9 @@
 
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import Link from "next/link";
-import axios from "axios";
 import Swal from 'sweetalert2';
 import FormWrapper from "@/components/FormWrapper/page";
+import { passwordForgot } from "@/app/api/route";
 
 const { useState, useEffect } = require("react")
 
@@ -14,8 +14,7 @@ const forgotPassword = () => { //preset trae data
 
     const sendEmail = async (data) => {
         try {
-            const response = await axios.post("http://localhost:8000/api/user/forgotPassword", data);
-            const result = await response.data;
+            const result = await passwordForgot(data);
             console.log(result);
             Swal.fire({
                 toast: true,

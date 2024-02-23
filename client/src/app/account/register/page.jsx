@@ -1,7 +1,7 @@
 'use client'
 
+import { register } from "@/app/api/route";
 import UserForm from "@/components/UserForm/page";
-import axios from "axios";
 import Swal from 'sweetalert2';
 
 const { Fragment } = require("react")
@@ -9,8 +9,7 @@ const { Fragment } = require("react")
 const Register = () => {
     const createNewUser = async (data, onSuccess, onFail) => {
         try {
-            const response = await axios.post("http://localhost:8000/api/user/new", data);
-            const result = await response.data;
+            const result = await register(data);
             console.log(result);
             onSuccess(result);
             Swal.fire({

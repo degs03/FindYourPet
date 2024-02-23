@@ -1,16 +1,15 @@
 'use client'
 
 import { useEffect, useState } from 'react';
-import axios from "axios";
 import {  Card, CardActions, CardContent, CardMedia, Container, Grid, ImageList, ImageListItem, Typography } from '@mui/material';
 import ShareIcon from '@mui/icons-material/Share';
 import { Fragment } from 'react';
+import { findAllPosts } from '../api/route';
 export default function Posts() {
     const [posts, setPosts] = useState([]);
     const PostsInfo = async () => {
         try {
-            const response = await axios.get(`http://localhost:8000/api/post/all`);
-            const result = await response.data;
+            const result = await findAllPosts();
             console.log(result);
             setPosts(result);
             console.log(posts)

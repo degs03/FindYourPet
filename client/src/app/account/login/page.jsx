@@ -1,18 +1,23 @@
 'use client'
 
+import { login } from "@/app/api/route";
 import UserForm from "@/components/UserForm/page";
-import axios from "axios";
+import { setUser, userLogin } from "@/lib/features/users/userSlice";
+import { useAppDispatch } from "@/lib/hooks";
 import Swal from 'sweetalert2';
 
 const { Fragment } = require("react")
 
 const Login = () => {
+    const dispatch = useAppDispatch();
+
     const createNewUser = async (data, onSuccess, onFail) => {
         try {
-            const response = await axios.post("http://localhost:8000/api/user/session", data, {withCredentials: true});// withCredentials, permite recibir y mandar cookies
-            const result = await response.data;
+            const result = await login(data);
             console.log(result);
             onSuccess(result);
+            dispatch(userLogin());
+            dispatch(setUser(result.usuario));
             Swal.fire({
                 toast: true,
                 icon: "success",

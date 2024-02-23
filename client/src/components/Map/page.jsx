@@ -2,14 +2,9 @@
 import React, { useRef, useEffect, useState } from 'react';
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
 import { createRoot } from 'react-dom/client';
-import axios from 'axios';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import * as geolib from 'geolib';
-import { Accordion, AccordionDetails, AccordionSummary, AppBar, Avatar, Badge, Box, Container, Drawer, Fab, Grid, IconButton, InputBase, Toolbar, Typography, styled } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import DrawIcon from '../icons/DrawIcon';
-import ClearIcon from '@mui/icons-material/Clear';
+import { Avatar} from '@mui/material';
+import { findAllPosts } from '@/app/api/route';
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_API_KEY;
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
@@ -70,8 +65,7 @@ const Map = () => {
     console.log(width)
     const getLocation = async () => {
         try {
-            const response = await axios.get(`http://localhost:8000/api/post/all`);
-            const result = await response.data;
+            const result = await findAllPosts();
             console.log(result);
             setPosts(result)
         } catch (error) {

@@ -15,10 +15,14 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const postRoutes = require("./routes/post.routes");
-app.use('/api/post', postRoutes);
+const sessionRoutes = require("./routes/session.routes");
+app.use('/api/session', sessionRoutes);
 
 const userRoutes = require("./routes/user.routes");
 app.use('/api/user', userRoutes);
+
+const postRoutes = require("./routes/post.routes");
+app.use('/api/post', postRoutes);
+
 
 app.listen(port, () => console.log(`listen port: ${port}`));
