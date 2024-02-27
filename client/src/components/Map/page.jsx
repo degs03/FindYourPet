@@ -3,14 +3,15 @@ import React, { useRef, useEffect, useState } from 'react';
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
 import { createRoot } from 'react-dom/client';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { AppBar, Avatar, Badge, Box, Container, Drawer, Fab, Grid, IconButton, InputAdornment, InputBase, TextField, Toolbar, Typography, styled } from '@mui/material';
+import { AppBar, Avatar, Badge, Box, Button, Container, Drawer, Fab, Grid, IconButton, InputAdornment, InputBase, TextField, Toolbar, Typography, styled } from '@mui/material';
 import { findAllPosts } from '@/app/api/route';
 import SearchIcon from '@mui/icons-material/Search';
 import styles from "./page.module.css";
 import * as geolib from 'geolib';
 import ClearIcon from '@mui/icons-material/Clear';
 import DrawIcon from '../icons/DrawIcon';
-import PetDetail from '../PetDetail/page';
+import { styButton } from '../Styles/styles';
+import { useRouter } from 'next/navigation';
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_API_KEY;
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
@@ -63,6 +64,7 @@ const StyledFab = styled(Fab)({
 });
 
 const Map = () => {
+    const router = useRouter();
     const mapContainer = useRef(null);
     const map = useRef(null); // useRef previene que el mapa se recargue cada vez que el usuario interactue
     const [lng, setLng] = useState(-55.86);
@@ -121,7 +123,7 @@ const Map = () => {
                     Avistamientos cercanos
                 </Typography>
             </Grid>
-            <Grid item sx={{ display: 'flex', justifyContent:'center', ml:2, mt:2 }}>
+            <Grid item sx={{ display: 'flex', justifyContent: 'center', ml: 2, mt: 2 }}>
                 <TextField
                     sx={sty}
                     placeholder="Busca avistamientos"
@@ -157,7 +159,7 @@ const Map = () => {
                         </Grid>
                     )) :
                     (
-                        <Typography variant="h6" sx={{ fontWeight: 'bold', marginTop: 4, ml:5 }}>
+                        <Typography variant="h6" sx={{ fontWeight: 'bold', marginTop: 4, ml: 5 }}>
                             No se han encontrado resultados.
                         </Typography>)
                 }
@@ -294,17 +296,16 @@ const Map = () => {
         }
     }, [posts]);
     return (
-        <Container maxWidth='xl' sx={{ height: "100%", width: "100%", mt: '3%' }}>
+        <Container maxWidth='xl' sx={{ height: "100", justifyContent: 'center', mt: '2%' }}>
             <Grid container sx={{ display: 'flex', justifyContent: 'center' }}>
                 <Grid item lg={3} xs={12}
                     sx={{
                         bgcolor: 'white',
-                        width: "100%",
                         alignItems: 'center',
                         py: { lg: 3, md: 0, sm: 0, xs: 0 },
                         px: 3,
                         mr: { md: 0, lg: 5, sm: 0, xs: 0 },
-                        height: { lg: '80vh', md: '0vh', sm: '0vh', xs: '0vh' },
+                        height: { lg: '85vh', md: '0vh', sm: '0vh', xs: '0vh' },
                         borderRadius: { lg: '20px 20px 20px 20px', xs: '20px 20px 20px 20px' }
                     }}
                 >
@@ -332,11 +333,11 @@ const Map = () => {
                         width >= 1200 ?
                             <Grid container sx={{ display: 'flex', flexDirection: 'column', mb: 2, mt: 2 }}>
 
-                                <Typography sx={{ fontSize: '16px', fontWeight: 'bold' }}>
+                                <Typography sx={{ fontSize: '16px', fontWeight: 'bold', color: '#3B3561' }}>
                                     Avistamientos mas cercanos a tu zona:
                                 </Typography>
 
-                                <Grid item sx={{ mt: 2 }}>
+                                <Grid item sx={{ mt: 1 }}>
                                     {filteredMarkers.length > 0 ?
                                         filteredMarkers.map((item, idx) => (
                                             <Grid key={idx}>
@@ -344,7 +345,6 @@ const Map = () => {
                                                     <StyledBadge
                                                         overlap="circular"
                                                         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                                                        variant="dot"
                                                     >
                                                         <Avatar alt="Remy Sharp" src={`${item.image} `} />
                                                     </StyledBadge>
@@ -385,14 +385,27 @@ const Map = () => {
                             </Grid>
                     }
                 </Grid>
-                <Grid item lg={8} xs={12} ref={mapContainer}
-                    sx={{
-                        width: "100%",
-                        height: { lg: '80vh', md: '93vh', sm: '93vh', xs: '95vh' },
-                        borderRadius: { lg: '20px 20px 20px 20px', md: '20px 20px 20px 20px', sm: '20px 20px 20px 20px', xs: '20px 20px 20px 20px' }
-                    }} />
+                <Grid item sx={{ my: 2, width: '90vw' }} lg={8} xs={12}>
+                    {width > 900 ?
+                        <Grid container >
+                            <Grid item sx={{ display: "flex", width: '100%', justifyContent: "space-between", gap: 3, mb: 2, px: 1 }}>
+                                <Button variant="contained" sx={styButton} onClick={() => router.push("/posts")}>
+                                    Todas las publicaciones
+                                </Button>
+                                <Button variant="contained" sx={styButton} onClick={() => router.push("/posts/new")}>
+                                    Agregar publicación
+                                </Button>
+                            </Grid>
+                        </Grid> : null}
+                    <Grid item ref={mapContainer}
+                        sx={{
+                            height: { lg: '78vh', md: '90vh', sm: '90vh', xs: '90vh' },
+                            borderRadius: { lg: '20px 20px 20px 20px', md: '20px 20px 20px 20px', sm: '20px 20px 20px 20px', xs: '20px 20px 20px 20px' }
+                        }} />
+                </Grid>
+
             </Grid>
-        </Container>
+        </Container >
     )
 };
 
