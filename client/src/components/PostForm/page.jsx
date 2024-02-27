@@ -10,6 +10,7 @@ import { Map, Marker, GeolocateControl } from "react-map-gl";
 import { usePostContext } from "../../app/context/PostContext";
 import { useAppSelector } from "@/lib/hooks";
 import { selectUser } from "@/lib/features/users/userSlice";
+import { styButton } from "../Styles/styles";
 
 const PostForm = ({ onSubmit, preset = {} }) => {
     const router = useRouter();
@@ -26,8 +27,14 @@ const PostForm = ({ onSubmit, preset = {} }) => {
     const [location, setLocation] = useState([]);
     const [image, setImage] = useState("");
     const [viewport, setViewport] = useState({}); // se van a guardar la ubicacion actual latitud y longitud
+    const [width, setWidth] = useState(window.innerWidth);
 
     const steps = ['Complete el formulario', 'Indique la última zona de ubicación', 'Añade la imagen de tu mascota'];
+
+
+    const handleResize = () => {
+        setWidth(window.innerWidth);
+    };
 
     const createdOk = () => { router.push("/") };
     const createdFail = (errorMsg) => {
@@ -120,15 +127,17 @@ const PostForm = ({ onSubmit, preset = {} }) => {
                 zoom: 14,
             });
         });
+
+        window.addEventListener("resize", handleResize);
+
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
     }, []);
 
     // MUI-STEPPER
     const [activeStep, setActiveStep] = useState(0);
     const [skipped, setSkipped] = useState(new Set());
-
-    const isStepOptional = (step) => {
-        return step === 1;
-    };
 
     const isStepSkipped = (step) => {
         return skipped.has(step);
@@ -149,28 +158,28 @@ const PostForm = ({ onSubmit, preset = {} }) => {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
 
-    const handleSkip = () => {
-        if (!isStepOptional(activeStep)) {
-            // You probably want to guard against something like this,
-            // it should never occur unless someone's actively trying to break something.
-            throw new Error("You can't skip a step that isn't optional.");
-        }
-
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
-        setSkipped((prevSkipped) => {
-            const newSkipped = new Set(prevSkipped.values());
-            newSkipped.add(activeStep);
-            return newSkipped;
-        });
-    };
-
     const handleReset = () => {
         setActiveStep(0);
     };
 
     return (
         <Fragment>
-            <Container component="main" maxWidth="xl">
+            <Container sx={{ my: 2 }} maxWidth="xl">
+                {width > 900 ?
+                    <Grid container spacing={4}>
+                        <Grid item xs={12} md={6}>
+                            <Button variant="contained" sx={styButton} onClick={() => router.push("/")}>
+                                Inicio
+                            </Button>
+                        </Grid>
+                        <Grid item md={6} sx={{ display: "flex", justifyContent: "flex-end", gap: 3 }}>
+                            <Button variant="contained" sx={styButton} onClick={() => router.push("/posts")}>
+                                Todas las publicaciones
+                            </Button>
+                        </Grid>
+                    </Grid> : null}
+            </Container>
+            <Container component="main" maxWidth="xl" sx={{backgroundColor:"#FFF", borderRadius:3}}>
                 <Box sx={{ padding: 5 }}>
                     <Stepper activeStep={activeStep} sx={{ mt: 3, mb: 7 }}>
                         {steps.map((label) => {
