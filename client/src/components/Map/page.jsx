@@ -3,12 +3,14 @@ import React, { useRef, useEffect, useState } from 'react';
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
 import { createRoot } from 'react-dom/client';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { AppBar, Avatar, Badge, Box, Container, Drawer, Fab, Grid, IconButton, InputBase, Toolbar, Typography, styled} from '@mui/material';
+import { AppBar, Avatar, Badge, Box, Container, Drawer, Fab, Grid, IconButton, InputAdornment, InputBase, TextField, Toolbar, Typography, styled } from '@mui/material';
 import { findAllPosts } from '@/app/api/route';
 import SearchIcon from '@mui/icons-material/Search';
+import styles from "./page.module.css";
 import * as geolib from 'geolib';
 import ClearIcon from '@mui/icons-material/Clear';
 import DrawIcon from '../icons/DrawIcon';
+import PetDetail from '../PetDetail/page';
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_API_KEY;
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
@@ -34,12 +36,32 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
         },
     },
 }));
+const sty = {
+    color: '#FFFF',
+    '& label.Mui-focused': {
+        color: 'black',
+        borderColor: 'black'
+    },
+    '& .MuiOutlinedInput-root': {
+        '&.Mui-focused fieldset': {
+            color: 'black',
+            borderColor: 'black'
+        }
+    },
+    "& .MuiOutlinedInput-notchedOutline": {
+        border: 'none'
+    },
+    width: { xs: '90vw', sm: '90vw', md: "90vw", lg: '290px' },
+    bgcolor: '#e5e7eb',
+    borderRadius: '25px'
+};
 const StyledFab = styled(Fab)({
     position: 'absolute',
     zIndex: 1,
     borderRadius: '20px',
     width: '200px'
 });
+
 const Map = () => {
     const mapContainer = useRef(null);
     const map = useRef(null); // useRef previene que el mapa se recargue cada vez que el usuario interactue
@@ -52,7 +74,7 @@ const Map = () => {
     const [state, setState] = React.useState({ right: false });
     const [width, setWidth] = useState(window.innerWidth);
     const [height, setHeight] = useState(window.innerHeight);
-
+    const [search, setSearch] = useState('');
     useEffect(() => {
         window.addEventListener("resize", handleResize);
 
@@ -61,38 +83,35 @@ const Map = () => {
         };
     }, []);
 
+    const handleSearchChange = (e) => {
+        setSearch(e.target.value);
+    }
+
+    const filteredMarkers = markerRadius.filter((marker) => {
+        return marker.name.toLowerCase().includes(search.toLowerCase());
+    })
     const handleResize = () => {
         setWidth(window.innerWidth);
         setHeight(window.innerHeight);
     };
-    console.log(height);
-    console.log(width)
     const getLocation = async () => {
         try {
             const result = await findAllPosts();
             console.log(result);
-            setPosts(result)
+            setPosts(result);
         } catch (error) {
             console.log({ error: error })
         }
     }
-    const toggleDrawer = (anchor, open) => (event) => {
-        if (
-            event &&
-            event.type === 'keydown' &&
-            (event.key === 'Tab' || event.key === 'Shift')
-        ) {
-            return;
-        }
 
-        setState({ ...state, [anchor]: open });
+    const toggleDrawer = (anchor, open) => (event) => {
+        setState({ ...state, [anchor]: Boolean(open) });
     };
+
     const list = (anchor) => (
         <Box
             sx={{ width: { lg: '30vw', md: '50vw', sm: '70vw', xs: '98vw' }, p: 2 }}
             role="presentation"
-            onClick={toggleDrawer(anchor, false)}
-            onKeyDown={toggleDrawer(anchor, false)}
         >
             <IconButton onClick={toggleDrawer(anchor, false)} sx={{ ml: 2 }}>
                 <ClearIcon fontSize="large" />
@@ -102,24 +121,46 @@ const Map = () => {
                     Avistamientos cercanos
                 </Typography>
             </Grid>
+            <Grid item sx={{ display: 'flex', justifyContent:'center', ml:2, mt:2 }}>
+                <TextField
+                    sx={sty}
+                    placeholder="Busca avistamientos"
+                    InputProps={{
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <SearchIcon />
+                            </InputAdornment>
+                        ),
+                    }}
+                    value={search}
+                    onChange={handleSearchChange}
+                />
+
+            </Grid>
             <Grid item>
-                {markerRadius.map((item, idx) => (
-                    <Grid key={idx}>
-                        <Box item key={idx} sx={{ display: 'flex', alignItems: 'center', mt: 2, px: 2 }}>
-                            <StyledBadge
-                                overlap="circular"
-                                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                                variant="dot"
-                            >
-                                <Avatar alt="Remy Sharp" src={`${item.image}`} />
-                            </StyledBadge>
-                            <Grid sx={{ display: 'flex', width: '100%', flexDirection: 'column' }}>
-                                <Typography sx={{ ml: 2 }} >{item.name}</Typography>
-                                <Typography variant="body2" color="text.secondary" sx={{ ml: 2 }}>{dist[idx] < 1.000 ? Math.round(dist[idx] * 1000) + ' m' : dist[idx].toFixed(2) + ' km'}</Typography>
-                            </Grid>
-                        </Box>
-                    </Grid>
-                ))}
+                {filteredMarkers.length > 0 ?
+                    filteredMarkers.map((item, idx) => (
+                        <Grid key={idx}>
+                            <Box item key={idx} sx={{ display: 'flex', alignItems: 'center', mt: 2, px: 2 }}>
+                                <StyledBadge
+                                    overlap="circular"
+                                    anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                                    variant="dot"
+                                >
+                                    <Avatar alt="Remy Sharp" src={`${item.image}`} />
+                                </StyledBadge>
+                                <Grid sx={{ display: 'flex', width: '100%', flexDirection: 'column' }}>
+                                    <Typography sx={{ ml: 2 }} >{item.name}</Typography>
+                                    <Typography variant="body2" color="text.secondary" sx={{ ml: 2 }}>{dist[idx] < 1.000 ? Math.round(dist[idx] * 1000) + ' m' : dist[idx].toFixed(2) + ' km'}</Typography>
+                                </Grid>
+                            </Box>
+                        </Grid>
+                    )) :
+                    (
+                        <Typography variant="h6" sx={{ fontWeight: 'bold', marginTop: 4, ml:5 }}>
+                            No se han encontrado resultados.
+                        </Typography>)
+                }
             </Grid>
         </Box>
     );
@@ -183,11 +224,43 @@ const Map = () => {
                 el.style.width = '35px';
                 el.style.height = '35px';
                 el.style.borderRadius = '50%';
+                const popup = new mapboxgl.Popup({
+                    closeButton: false,
+                    className: styles['custom-popup']
+                })
+                    .setHTML(`
+                        <div>
+                            <div  >
+                                <img
+                                    class=${styles.popupImage}
+                                    height="150"
+                                    src="${item.image}"
+                                    style="aspect-ratio: 192/192; object-fit: cover;"
+                                    width="192"
+                                />
+                            </div>
+                            <div style="background-color: #f3f4f6; padding: 7px; border-radius: 20px">
+                                <strong>Nombre:</strong>
+                                <span>${item.name}</span>
+                                <div>
+                                    <p>
+                                        <strong >Especie:</strong>
+                                        <span>${item.species}</span>
+                                    </p>
+                                    <p>
+                                        <strong >Raza:</strong>
+                                        <span>${item.breed}</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    `);
                 new mapboxgl.Marker(el)
                     .setLngLat([item.location[0].lng, item.location[0].lat])
+                    .setPopup(popup)
                     .addTo(map.current);//agrega los marcadores al mapa actual
-            });
 
+            });
             navigator.geolocation.getCurrentPosition((position) => {
                 const userLocation = {
                     latitude: position.coords.latitude,
@@ -221,55 +294,73 @@ const Map = () => {
         }
     }, [posts]);
     return (
-        <Container maxWidth='xl' sx={{ height: "100%", width: "100%", display: 'flex', alignSelf: 'center' }}>
-            <Grid container>
+        <Container maxWidth='xl' sx={{ height: "100%", width: "100%", mt: '3%' }}>
+            <Grid container sx={{ display: 'flex', justifyContent: 'center' }}>
                 <Grid item lg={3} xs={12}
                     sx={{
                         bgcolor: 'white',
-                        width: "60%",
-                        display: 'flex',
-                        flexDirection: 'column',
-                        py: 3,
+                        width: "100%",
+                        alignItems: 'center',
+                        py: { lg: 3, md: 0, sm: 0, xs: 0 },
                         px: 3,
-                        height: { lg: '80vh', sm: '12vh', xs: '12.5vh' },
-                        borderRadius: { lg: '20px 0px 0px 20px', xs: '20px 20px 0px 0px' }
+                        mr: { md: 0, lg: 5, sm: 0, xs: 0 },
+                        height: { lg: '80vh', md: '0vh', sm: '0vh', xs: '0vh' },
+                        borderRadius: { lg: '20px 20px 20px 20px', xs: '20px 20px 20px 20px' }
                     }}
                 >
-                    <Grid item sx={{ border: '1px solid', borderRadius: '20px', display: 'flex' }}>
-                        <InputBase
-                            sx={{ ml: 1, flex: 1 }}
-                            placeholder="Busca avistamientos"
-                        />
-                        <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
-                            <SearchIcon />
-                        </IconButton>
-                    </Grid>
                     {
                         width >= 1200 ?
-                            <Grid container sx={{ display: 'flex', flexDirection: 'column', my: 5 }}>
+                            <Grid item sx={{ display: 'flex' }}>
+                                <TextField
+                                    sx={sty}
+                                    placeholder="Busca avistamientos"
+                                    InputProps={{
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <SearchIcon />
+                                            </InputAdornment>
+                                        ),
+                                    }}
+                                    value={search}
+                                    onChange={handleSearchChange}
+                                />
+
+                            </Grid> :
+                            null
+                    }
+                    {
+                        width >= 1200 ?
+                            <Grid container sx={{ display: 'flex', flexDirection: 'column', mb: 2, mt: 2 }}>
 
                                 <Typography sx={{ fontSize: '16px', fontWeight: 'bold' }}>
                                     Avistamientos mas cercanos a tu zona:
                                 </Typography>
 
-                                <Grid item sx={{mt:2}}>
-                                    {markerRadius.map((item, idx) => (
-                                        <Grid key={idx}>
-                                            <Box item key={idx} sx={{ display: 'flex', alignItems: 'center', mt: 2 }}>
-                                                <StyledBadge
-                                                    overlap="circular"
-                                                    anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                                                    variant="dot"
-                                                >
-                                                    <Avatar alt="Remy Sharp" src={`${item.image}`} />
-                                                </StyledBadge>
-                                                <Grid sx={{ display: 'flex', width: '100%', flexDirection: 'column' }}>
-                                                    <Typography sx={{ ml: 2 }} >{item.name}</Typography>
-                                                    <Typography variant="body2" color="text.secondary" sx={{ ml: 2 }}>{dist[idx] < 1.000 ? Math.round(dist[idx] * 1000) + ' m' : dist[idx].toFixed(2) + ' km'}</Typography>
-                                                </Grid>
-                                            </Box>
-                                        </Grid>
-                                    ))}
+                                <Grid item sx={{ mt: 2 }}>
+                                    {filteredMarkers.length > 0 ?
+                                        filteredMarkers.map((item, idx) => (
+                                            <Grid key={idx}>
+                                                <Box item key={idx} sx={{ display: 'flex', alignItems: 'center', mt: 2 }}>
+                                                    <StyledBadge
+                                                        overlap="circular"
+                                                        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                                                        variant="dot"
+                                                    >
+                                                        <Avatar alt="Remy Sharp" src={`${item.image} `} />
+                                                    </StyledBadge>
+                                                    <Grid sx={{ display: 'flex', width: '100%', flexDirection: 'column' }}>
+                                                        <Typography sx={{ ml: 2 }} >{item.name}</Typography>
+                                                        <Typography variant="body2" color="text.secondary" sx={{ ml: 2 }}>{dist[idx] < 1.000 ? Math.round(dist[idx] * 1000) + ' m' : dist[idx].toFixed(2) + ' km'}</Typography>
+                                                    </Grid>
+                                                </Box>
+                                            </Grid>
+                                        )) :
+                                        (
+                                            <Typography variant="h6" sx={{ fontWeight: 'bold', marginTop: 4 }}>
+                                                No se han encontrado resultados.
+                                            </Typography>)
+
+                                    }
                                 </Grid>
                             </Grid> :
                             <Grid>
@@ -294,11 +385,11 @@ const Map = () => {
                             </Grid>
                     }
                 </Grid>
-                <Grid item lg={9} xx={12} ref={mapContainer}
+                <Grid item lg={8} xs={12} ref={mapContainer}
                     sx={{
                         width: "100%",
-                        height: { lg: '80vh', sm: '78vh', xs: '80vh' },
-                        borderRadius: { lg: '0px 20px 20px 0px', xs: '0px 0px 20px 20px' }
+                        height: { lg: '80vh', md: '93vh', sm: '93vh', xs: '95vh' },
+                        borderRadius: { lg: '20px 20px 20px 20px', md: '20px 20px 20px 20px', sm: '20px 20px 20px 20px', xs: '20px 20px 20px 20px' }
                     }} />
             </Grid>
         </Container>

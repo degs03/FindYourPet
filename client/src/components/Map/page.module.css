@@ -11,3 +11,17 @@
     margin: 12px;
     border-radius: 4px;
 }
+
+.input {
+    border-radius: 100%;
+}
+
+.customPopup {
+    background-color: green;
+    align-items: center;
+}
+
+.popupImage {
+    margin-left: 10px;
+    background-color:#F05D23;
+}

@@ -41,7 +41,7 @@ const NavBar = () => {
         setAnchorElUser(null);
     };
     return (
-        <AppBar position="static" sx={{ backgroundColor: 'transparent', paddingTop: 1, boxShadow: 'none' }} >
+        <AppBar position="static" sx={{ backgroundColor: 'white', paddingTop: 1, boxShadow: 'none' }} >
             <Container maxWidth="xl">
                 <Toolbar disableGutters >
                     <Typography
@@ -53,7 +53,6 @@ const NavBar = () => {
                             mr: 2,
                             mb: 0.9,
                             display: { xs: 'none', md: 'flex' },
-                            fontFamily: 'Walter Turncoat, sans-serif',
                             fontSize: '2rem',
                             fontWeight: 800,
                             letterSpacing: '.1rem',
@@ -136,7 +135,6 @@ const NavBar = () => {
                             mr: 2,
                             display: { xs: 'flex', md: 'none' },
                             flexGrow: 1,
-                            fontFamily: 'Walter Turncoat, sans-serif',
                             fontWeight: 700,
                             letterSpacing: '.1rem',
                             color: '#3B3561',
