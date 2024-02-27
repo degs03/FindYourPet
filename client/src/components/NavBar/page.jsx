@@ -72,7 +72,7 @@ const NavBar = () => {
     return (
         <AppBar position="static" sx={{ backgroundColor: '#FFF', paddingTop: 1, boxShadow: 'none' }} >
             <Container maxWidth="xl">
-                <Toolbar disableGutters >
+                <Toolbar disableGutters>
                     <Typography
                         variant="h6"
                         noWrap
@@ -165,6 +165,7 @@ const NavBar = () => {
                             display: { xs: 'flex', md: 'none' },
                             flexGrow: 1,
                             fontWeight: 700,
+                            justifyContent:'center',
                             letterSpacing: '.1rem',
                             color: '#3B3561',
                             textDecoration: 'none',

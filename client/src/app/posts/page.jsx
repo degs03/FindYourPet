@@ -25,7 +25,7 @@ const sty = {
     "& .MuiOutlinedInput-notchedOutline": {
         border: 'none'
     },
-    width: { xs: '90vw', sm: '94vw', md: "94vw", lg: '290px' },
+    width: { xs: '90vw', sm: '94vw', md: "31vw", lg: '290px' },
     bgcolor: '#E0E2E7',
     borderRadius: '25px'
 };

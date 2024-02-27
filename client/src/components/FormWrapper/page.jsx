@@ -1,5 +1,4 @@
 import { Fragment } from "react";
-import bg from '/public/images/background.png';
 import Image from "next/image";
 import { Avatar, Box, Container, Typography } from "@mui/material";
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -16,7 +15,7 @@ const FormWrapper = ({ children }) => {
                     style={{
                         textDecoration: 'none',
                         boxShadow: 'none',
-                        color: '#c23502'
+                        color: '#3B3561'
                     }}>
                     FindYourPet
                 </Link>{' '}
@@ -28,8 +27,6 @@ const FormWrapper = ({ children }) => {
     return (
         <Fragment>
             <Image
-                src={bg}
-                alt="background"
                 fill
                 style={{
                     objectFit: 'cover',
@@ -54,7 +51,7 @@ const FormWrapper = ({ children }) => {
                             boxShadow: 'rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset'
                         }}
                     >
-                        <Avatar sx={{ m: 1, bgcolor: '#ED581D' }}>
+                        <Avatar sx={{ m: 1, bgcolor: '#3B3561' }}>
                             <LockOutlinedIcon />
                         </Avatar>
                         {children}

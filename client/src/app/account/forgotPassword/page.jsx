@@ -5,6 +5,7 @@ import Link from "next/link";
 import Swal from 'sweetalert2';
 import FormWrapper from "@/components/FormWrapper/page";
 import { passwordForgot } from "@/app/api/route";
+import { styButton } from "@/components/Styles/styles";
 
 const { useState, useEffect } = require("react")
 
@@ -73,7 +74,8 @@ const forgotPassword = () => { //preset trae data
                                     '&.Mui-focused fieldset': {
                                         borderColor: '#4b3a2e'
                                     }
-                                }
+                                },
+                                mb:2
                             }}
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
@@ -88,13 +90,7 @@ const forgotPassword = () => { //preset trae data
                                     type="submit"
                                     fullWidth
                                     variant="contained"
-                                    sx={{
-                                        mb: 3, mt: 3,
-                                        backgroundColor: "#8a6c54",
-                                        '&:hover': {
-                                            backgroundColor: "#6b5543",
-                                        }
-                                    }}
+                                    sx={styButton}
                                     onClick={handleFormSubmit}
                                 >
                                     Enviar email
@@ -104,14 +100,15 @@ const forgotPassword = () => { //preset trae data
                     </Grid>
                 </Grid>
                 <Grid container justifyContent="flex-end">
-                    <Grid item>
+                    <Grid item sx={{mt:2}}>
                         <Link 
                         href="/account/login" 
                         variant="body2"
                         style={{
                             textDecoration: 'none',
                             boxShadow: 'none',
-                            color: '#c23502'}}
+                            color: '#3B3561'
+                        }}
                         >
                             Volver a inicio
                         </Link>

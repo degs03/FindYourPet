@@ -4,6 +4,8 @@ import { useParams, useRouter } from "next/navigation";
 import Swal from 'sweetalert2';
 import FormWrapper from "@/components/FormWrapper/page";
 import { passwordReset } from "@/app/api/route";
+import { styButton } from "@/components/Styles/styles";
+import Link from "next/link";
 
 const { useState, useEffect } = require("react")
 
@@ -78,6 +80,7 @@ const resetPassword = () => {
                     <Grid item xs={12} >
                         <TextField
                             required
+                            type="password"
                             name="password"
                             label="Contraseña"
                             fullWidth
@@ -101,6 +104,7 @@ const resetPassword = () => {
                     <Grid item xs={12} >
                         <TextField
                             required
+                            type="password"
                             name="password"
                             label="Confirma tu contraseña"
                             fullWidth
@@ -113,7 +117,8 @@ const resetPassword = () => {
                                     '&.Mui-focused fieldset': {
                                         borderColor: '#4b3a2e'
                                     }
-                                }
+                                },
+                                mb: 2
                             }}
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
@@ -127,19 +132,28 @@ const resetPassword = () => {
                                 <Button
                                     type="submit"
                                     fullWidth
-                                    sx={{
-                                        mt: 3,
-                                        backgroundColor: "#8a6c54",
-                                        '&:hover': {
-                                            backgroundColor: "#6b5543",
-                                        }
-                                    }}
+                                    sx={styButton}
                                     variant="contained"
                                     onClick={handleFormSubmit}
                                 >
                                     Cambiar Contraseña
                                 </Button>
                             </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid container justifyContent="flex-end">
+                        <Grid item sx={{ mt: 2 }}>
+                            <Link
+                                href="/account/login"
+                                variant="body2"
+                                style={{
+                                    textDecoration: 'none',
+                                    boxShadow: 'none',
+                                    color: '#3B3561'
+                                }}
+                            >
+                                Volver a inicio
+                            </Link>
                         </Grid>
                     </Grid>
                 </Grid>

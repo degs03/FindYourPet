@@ -72,7 +72,7 @@ export default function Posts() {
                         </Grid>
                     </Grid> : null}
             </Container>
-            <Container sx={{ py: 4, backgroundColor: "#FFF", my: 2, borderRadius: 3 }} maxWidth="xl">
+            <Container sx={{ py: 4, backgroundColor: "#FFF", my: 2, borderRadius: 3, height:'81vh' }} maxWidth="xl">
                 <Grid container spacing={4}>
                     <Grid item xs={12} sm={6} md={6}>
                         <Grid container spacing={2}>
@@ -122,9 +122,9 @@ export default function Posts() {
                         </Grid>
                     </Grid>
                     <Grid item xs={12} sm={6} md={6}>
-                        <Carousel>
+                        <Carousel style={{height:'45vh'}} >
                             {images.map((img, idx) => (
-                                <Box key={idx} sx={{ position: "relative", width: { xs: 500, sm: 700, md: 700 }, height: { xs: 500, sm: 700, md: 700 } }}>
+                                <Box key={idx} sx={{ position: "relative", width: { xs: 500, sm: 700, md:'100%'}, height: { xs: 500, sm: 700, md: 600 } }}>
                                     <Image alt='Pet' src={`${img}`} priority fill style={{ objectFit: "cover" }} sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" />
                                 </Box>
                             )

@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import styles from "./page.module.css";
 import FormWrapper from "../FormWrapper/page";
+import { styButton } from "../Styles/styles";
 const { useState, useEffect } = require("react")
 
 const UserForm = ({ onSubmit, preset = {}, isSignUp }) => { //preset trae data
@@ -253,13 +254,7 @@ const UserForm = ({ onSubmit, preset = {}, isSignUp }) => { //preset trae data
                             type="submit"
                             fullWidth
                             variant="contained"
-                            sx={{
-                                mb: 3,
-                                backgroundColor: "#8a6c54",
-                                '&:hover': {
-                                    backgroundColor: "#6b5543",
-                                }
-                            }}
+                            sx={styButton}
                             onClick={handleFormSubmit}
                         >
                             {isSignUp ? 'Registrate' : 'Iniciar sesión'}
@@ -267,7 +262,7 @@ const UserForm = ({ onSubmit, preset = {}, isSignUp }) => { //preset trae data
                     </Grid>
                 </Grid>
                 <Grid container justifyContent="flex-end">
-                    <Grid item>
+                    <Grid item sx={{mt:2}}>
                         {isSignUp ?
                             (
                                 <Link href="/account/login" variant="body2" className={styles.link}>
