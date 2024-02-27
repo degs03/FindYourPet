@@ -95,13 +95,13 @@ export default function Posts() {
                                 <Typography variant='h6' fontSize={"1.1rem"}>Raza</Typography>
                                 <Typography variant='subtitle1' gutterBottom>{post.breed}</Typography>
                             </Grid>
-                            <Grid item xs={12}>
+                            <Grid item xs={12} sx={{height:"13vh", overflow:"auto", scrollbarColor:"#C9C8C4 transparent", scrollbarWidth:"thin"}}>
                                 <Typography variant='subtitle1'>{post.description}</Typography>
                             </Grid>
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid item xs={12} height={"30vh"}>
                             <Typography variant='h5' sx={{ my: 2 }}>Último avistamiento</Typography>
-                            <Box sx={{ height: "35vh", borderRadius: 3, overflow: "hidden" }}>
+                            <Box sx={{ height: "90%", borderRadius: 3, overflow: "hidden" }}>
                                 <Map
                                     {...viewport}
                                     onMove={evt => setViewport(evt.viewport)}
@@ -122,9 +122,9 @@ export default function Posts() {
                         </Grid>
                     </Grid>
                     <Grid item xs={12} sm={6} md={6}>
-                        <Carousel style={{height:'45vh'}} >
+                        <Carousel height={"70vh"}>
                             {images.map((img, idx) => (
-                                <Box key={idx} sx={{ position: "relative", width: { xs: 500, sm: 700, md:'100%'}, height: { xs: 500, sm: 700, md: 600 } }}>
+                                <Box key={idx} sx={{ position: "relative", width:'100%', height:'100%' }}>
                                     <Image alt='Pet' src={`${img}`} priority fill style={{ objectFit: "cover" }} sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" />
                                 </Box>
                             )

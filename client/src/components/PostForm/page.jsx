@@ -82,6 +82,7 @@ const PostForm = ({ onSubmit, preset = {} }) => {
             description: description,
             location: location.length === 0 ? null : location,
             image: downloadURLs == "" ? null : downloadURLs,
+            user: currentUser._id
         }
         console.log(data.location)
         onSubmit(data, createdOk, createdFail);

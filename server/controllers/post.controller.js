@@ -1,4 +1,5 @@
 const Post = require("../models/post.model");
+const User = require("../models/user.model");
 
 module.exports.findAllPosts = async (req, res) => {
     try {
@@ -29,6 +30,11 @@ module.exports.findPost = async (req, res) => {
 module.exports.createPost = async (req, res) => {
     try {
         const newPost = await Post.create(req.body);
+
+        // Añade el post al usuario en su lista de transacciones
+        const userId = req.body.user;
+        const user = await User.findByIdAndUpdate(userId, { $push: { posts: newPost._id } }, { new: true });
+
         res.status(201);
         res.json(newPost);
         console.log("se ha creado exitosamente!");
@@ -51,7 +57,21 @@ module.exports.updatePost = async (req, res) => {
 };
 module.exports.deletePost = async (req, res) => {
     try {
-        const deletedPost = await Post.deleteOne({ _id: req.params.id });
+        const postId = req.params.id;
+
+        if (!user) {
+            res.status(404);
+            return res.json({ error: "User not found for transaction" });
+        }
+
+        // Busca el usuario que tenga el post
+        const user = await User.findOneAndUpdate(
+            { posts: postId },
+            { $pull: { posts: postId } }
+        );
+
+        const deletedPost = await Post.deleteOne({ _id: postId });
+
         res.status(200);
         res.json(deletedPost);
 
