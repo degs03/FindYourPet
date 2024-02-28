@@ -399,7 +399,7 @@ const Map = () => {
                         </Grid> : null}
                     <Grid item ref={mapContainer}
                         sx={{
-                            height: { lg: '77vh', md: '90vh', sm: '90vh', xs: '90vh' },
+                            height: { lg: '77vh', md: '90vh', sm: '90vh', xs: '86vh' },
                             borderRadius: { lg: '20px 20px 20px 20px', md: '20px 20px 20px 20px', sm: '20px 20px 20px 20px', xs: '20px 20px 20px 20px' }
                         }} />
                 </Grid>

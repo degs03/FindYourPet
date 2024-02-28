@@ -34,7 +34,6 @@ const NavBar = () => {
     const [anchorElUser, setAnchorElUser] = useState(null);
     // Leer una cookie
     const miCookie = cookies.get('userToken');
-    console.log({ cookie: miCookie });
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
     };

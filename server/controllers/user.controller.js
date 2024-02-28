@@ -96,7 +96,7 @@ module.exports.login = async (req, res) => {
         const newJWT = jwt.sign({
             _id: user._id,
             firstName: user.firstName,
-            lastName: user.lastName
+            lastName: user.lastName,
         }, secretKey, { expiresIn: "10m" });
         res.cookie("userToken", newJWT, secretKey, { httpOnly: true });
         res.status(200);
@@ -107,7 +107,9 @@ module.exports.login = async (req, res) => {
                 {
                     _id: user._id,
                     firstName: user.firstName,
-                    lastName: user.lastName
+                    lastName: user.lastName,
+                    email:user.email,
+                    phone:user.phone
                 }
             })
     } catch (error) {

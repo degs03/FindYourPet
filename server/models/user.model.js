@@ -29,6 +29,9 @@ const UserSchema = new mongoose.Schema({
             message: "Por favor, ingrese un email válido."
         }
     },
+    phone: {
+        type: Number,
+    },
     password: {
         type: String,
         required: [true, "La contraseña es obligatoria."],

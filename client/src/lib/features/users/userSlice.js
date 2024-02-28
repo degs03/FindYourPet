@@ -7,6 +7,8 @@ export const userSlice = createSlice({
         logged: false,
         firstName: "",
         lastName: "",
+        email: "",
+        phone: ""
     },
     reducers: {
         userLogin: state => {
@@ -19,18 +21,23 @@ export const userSlice = createSlice({
             state._id = action.payload._id;
             state.firstName = action.payload.firstName;
             state.lastName = action.payload.lastName;
-
+            state.email = action.payload.email;
+            state.phone = action.payload.phone;
         },
         clearUser: state => {
             state._id = "";
             state.firstName = "";
             state.lastName = "";
+            state.email = "";
+            state.phone = "";
         },
-
+        updatePhone: (state, action) => {
+            state.phone = action.payload.phone;
+        }
     }
 })
 
-export const { userLogin, userLogout, setUser, clearUser } = userSlice.actions
+export const { userLogin, userLogout, setUser, clearUser, updatePhone } = userSlice.actions
 
 
 export const selectLogged = (state) => state.user.logged

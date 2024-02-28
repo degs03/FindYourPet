@@ -80,6 +80,19 @@ export function findUser(id) {
     });
 }
 
+export function addPhone(id, data) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const response = await axios.patch(`http://localhost:8000/api/user/${id}`, data, { withCredentials: true });
+            const result = await response.data;
+            resolve(result);
+        } catch (error) {
+            console.log(error);
+            reject(error);
+        }
+    });
+}
+
 /* Posts */
 export function findPost(id) {
     return new Promise(async (resolve, reject) => {
