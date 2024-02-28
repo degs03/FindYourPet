@@ -1,6 +1,6 @@
 'use client'
 import Dropzone from "@/components/Dropzone/page";
-import { Box, Button, Container, Grid, MenuItem, TextField, Typography, Stepper, Step, StepLabel } from "@mui/material";
+import { Box, Button, Container, Grid, MenuItem, TextField, Typography, Stepper, Step, StepLabel, styled } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { Fragment, useEffect, useState } from "react";
 import PetsSharpIcon from '@mui/icons-material/PetsSharp';
@@ -12,10 +12,30 @@ import { useAppSelector } from "@/lib/hooks";
 import { selectUser } from "@/lib/features/users/userSlice";
 import { styButton } from "../Styles/styles";
 
+const textFieldSty = {
+    '& label.Mui-focused': {
+        color: '#3B3561'
+    },
+    '& .MuiOutlinedInput-root': {
+        '&.Mui-focused fieldset': {
+            borderColor: '#3B3561'
+        }
+    }
+}
+
+const StyledButton = styled(Button)({
+    color: '#3B3561',
+    fontWeight: 'bold',
+    '&:hover': {
+        backgroundColor: "#EFEEF6",
+    },
+})
+
 const PostForm = ({ onSubmit, preset = {} }) => {
     const router = useRouter();
     const currentUser = useAppSelector(selectUser);
     const { downloadURLs } = usePostContext();
+    const [filesUploaded, setFilesUploaded] = useState(true);
     const [error, setError] = useState({});
     const [title, setTitle] = useState("");
     const [name, setName] = useState("");
@@ -29,11 +49,15 @@ const PostForm = ({ onSubmit, preset = {} }) => {
     const [viewport, setViewport] = useState({}); // se van a guardar la ubicacion actual latitud y longitud
     const [width, setWidth] = useState(window.innerWidth);
 
-    const steps = ['Complete el formulario', 'Indique la última zona de ubicación', 'Añade la imagen de tu mascota'];
+    const steps = ['Complete el formulario', 'Añade la imagen de tu mascota', 'Indique la última zona de ubicación'];
 
 
     const handleResize = () => {
         setWidth(window.innerWidth);
+    };
+
+    const handleFilesUploaded = (uploaded) => {
+        setFilesUploaded(uploaded);
     };
 
     const createdOk = () => { router.push("/") };
@@ -93,16 +117,20 @@ const PostForm = ({ onSubmit, preset = {} }) => {
             preset.name &&
             preset.age &&
             preset.species &&
+            preset.breed &&
             preset.description &&
             preset.location &&
             preset.image
         ) {
+            let ageAndType = preset.age.split(/(\d+)/).filter(Boolean).map(str => isNaN(str) ? str.trim() : str);
             setTitle(preset.title);
             setName(preset.name);
-            setAge(preset.age);
+            setAge(ageAndType[0]);
+            setAgeType(ageAndType[1]);
             setSpecies(preset.species);
+            setBreed(preset.breed);
             setDescription(preset.description);
-            setLocation(preset.location);
+            setLocation(preset.location[0]);
             setImage(preset.image);
         }
     }, [preset]);
@@ -163,6 +191,16 @@ const PostForm = ({ onSubmit, preset = {} }) => {
         setActiveStep(0);
     };
 
+    const isStepFailed = (step) => {
+        if(error.title || error.name || error.age || error.species || error.breed || error.description){
+            return step === 0;
+        }else if(error.image){
+            return step === 1;
+        }else if(error.location){
+            return step === 2;
+        }
+    };
+
     return (
         <Fragment>
             <Container sx={{ my: 2 }} maxWidth="xl">
@@ -180,36 +218,45 @@ const PostForm = ({ onSubmit, preset = {} }) => {
                         </Grid>
                     </Grid> : null}
             </Container>
-            <Container component="main" maxWidth="xl" sx={{backgroundColor:"#FFF", borderRadius:3}}>
+            <Container component="main" maxWidth="xl" sx={{ backgroundColor: "#FFF", borderRadius: 3 }}>
                 <Box sx={{ padding: 5 }}>
-                    <Stepper activeStep={activeStep} sx={{ mt: 3, mb: 7 }}>
-                        {steps.map((label) => {
+                    <Stepper activeStep={activeStep} sx={{ mt: 3, mb: { xs: 3, sm: 7 } }}>
+                        {steps.map((label, index) => {
                             const stepProps = {};
                             const labelProps = {};
+                            if (isStepFailed(index)) {
+                                labelProps.optional = (
+                                    <Typography variant="caption" color="error">
+                                        {width > 600 ? "Alert message" : ""}
+                                    </Typography>
+                                );
+
+                                labelProps.error = true;
+                            }
                             return (
                                 <Step
                                     key={label}
                                     {...stepProps}
                                     sx={{
                                         '& .MuiStepLabel-root .Mui-completed': {
-                                            color: '#F4AFAB', // circle color (COMPLETED)
+                                            color: `${labelProps.error? "#d32f2f" : "#3B3561"}`, // circle color (COMPLETED)
                                         },
                                         '& .MuiStepLabel-label.Mui-completed.MuiStepLabel-alternativeLabel':
                                         {
-                                            color: '#F4AFAB', // Just text label (COMPLETED)
+                                            color: '#3B3561', // Just text label (COMPLETED)
                                         },
                                         '& .MuiStepLabel-root .Mui-active': {
-                                            color: '#F4CBC6', // circle color (ACTIVE)
+                                            color: `${labelProps.error? "#d32f2f" : "#3B3561"}`, // circle color (ACTIVE)
                                         },
                                         '& .MuiStepLabel-label.Mui-active.MuiStepLabel-alternativeLabel':
                                         {
-                                            color: '#F4AFAB', // Just text label (ACTIVE)
+                                            color: '#3B3561', // Just text label (ACTIVE)
                                         },
                                         '& .MuiStepLabel-root .Mui-active .MuiStepIcon-text': {
                                             fill: 'white', // circle's number (ACTIVE)
                                         },
                                     }}>
-                                    <StepLabel {...labelProps}>{label}</StepLabel>
+                                    <StepLabel {...labelProps}>{width > 600 ? label : ""}</StepLabel>
                                 </Step>
                             );
                         })}
@@ -228,12 +275,14 @@ const PostForm = ({ onSubmit, preset = {} }) => {
                         <Fragment>
                             {activeStep === 0 &&
                                 <Box component="form" noValidate>
-                                    <Grid container spacing={2}>
-                                        <Grid item xs={12} >
+                                    {width > 600 ? null : <Typography variant="h6" sx={{ color: "#3b3561", display: "flex", justifyContent: "center", mb: 3, fontSize: "1.1rem" }}>{steps[activeStep]}</Typography>}
+                                    <Grid container spacing={3}>
+                                        <Grid item xs={12}>
                                             <TextField
                                                 required
                                                 name="title"
                                                 label="Título"
+                                                sx={textFieldSty}
                                                 fullWidth
                                                 value={title}
                                                 onChange={(e) => setTitle(e.target.value)}
@@ -241,7 +290,7 @@ const PostForm = ({ onSubmit, preset = {} }) => {
                                                 helperText={error?.title?.message}
                                             />
                                         </Grid>
-                                        <Grid item xs={12} sx={{ display: "flex" }} >
+                                        <Grid item xs={12} sm={4}>
                                             <TextField
                                                 required
                                                 name="name"
@@ -251,8 +300,20 @@ const PostForm = ({ onSubmit, preset = {} }) => {
                                                 onChange={(e) => setName(e.target.value)}
                                                 error={error?.name ? true : false}
                                                 helperText={error?.name?.message}
-                                                sx={{ mr: 2 }}
+                                                sx={{
+                                                    mr: 3,
+                                                    '& label.Mui-focused': {
+                                                        color: '#3B3561'
+                                                    },
+                                                    '& .MuiOutlinedInput-root': {
+                                                        '&.Mui-focused fieldset': {
+                                                            borderColor: '#3B3561'
+                                                        }
+                                                    }
+                                                }}
                                             />
+                                        </Grid>
+                                        <Grid item xs={12} sm={4}>
                                             <TextField
                                                 required
                                                 name="age"
@@ -263,11 +324,24 @@ const PostForm = ({ onSubmit, preset = {} }) => {
                                                 onChange={(e) => setAge(e.target.value)}
                                                 error={error?.age ? true : false}
                                                 helperText={error?.age?.message}
-                                                sx={{ mr: 2 }}
+                                                sx={{
+                                                    mr: 3,
+                                                    '& label.Mui-focused': {
+                                                        color: '#3B3561'
+                                                    },
+                                                    '& .MuiOutlinedInput-root': {
+                                                        '&.Mui-focused fieldset': {
+                                                            borderColor: '#3B3561'
+                                                        }
+                                                    }
+                                                }}
                                             />
+                                        </Grid>
+                                        <Grid item xs={12} sm={4}>
                                             <TextField
                                                 select
                                                 label="Seleccione el tiempo"
+                                                sx={textFieldSty}
                                                 fullWidth
                                                 value={ageType}
                                                 onChange={(e) => setAgeType(e.target.value)}
@@ -293,12 +367,23 @@ const PostForm = ({ onSubmit, preset = {} }) => {
                                                 onChange={(e) => setSpecies(e.target.value)}
                                                 error={error?.species ? true : false}
                                                 helperText={error?.species?.message}
-                                                sx={{ mr: 2 }}
+                                                sx={{
+                                                    mr: 3,
+                                                    '& label.Mui-focused': {
+                                                        color: '#3B3561'
+                                                    },
+                                                    '& .MuiOutlinedInput-root': {
+                                                        '&.Mui-focused fieldset': {
+                                                            borderColor: '#3B3561'
+                                                        }
+                                                    }
+                                                }}
                                             />
                                             <TextField
                                                 required
                                                 name="breed"
                                                 label="Raza"
+                                                sx={textFieldSty}
                                                 fullWidth
                                                 value={breed}
                                                 onChange={(e) => setBreed(e.target.value)}
@@ -311,6 +396,7 @@ const PostForm = ({ onSubmit, preset = {} }) => {
                                                 required
                                                 name="description"
                                                 label="Descripción"
+                                                sx={textFieldSty}
                                                 fullWidth
                                                 multiline
                                                 value={description}
@@ -325,13 +411,15 @@ const PostForm = ({ onSubmit, preset = {} }) => {
                             }
                             {activeStep === 1 &&
                                 <Grid item xs={12} >
-                                    <Dropzone />
+                                    {width > 600 ? null : <Typography variant="h6" sx={{ color: "#3b3561", display: "flex", justifyContent: "center", mb: 3, fontSize: "1.1rem" }}>{steps[activeStep]}</Typography>}
+                                    <Dropzone onFilesUploaded={handleFilesUploaded} />
                                 </Grid>
                             }
                             {activeStep === 2 &&
                                 //Pregunta si existe la latitud y longitud
                                 viewport.latitude && viewport.longitude && (
-                                    <Grid item xs={12} sx={{ height: "55vh" }} >
+                                    <Grid item xs={12} sx={{ height: "55vh", borderRadius: 3, overflow: "hidden" }} >
+                                        {width > 600 ? null : <Typography variant="h6" sx={{ color: "#3b3561", display: "flex", justifyContent: "center", mb: 3, fontSize: "1.1rem" }}>{steps[activeStep]}</Typography>}
                                         <Map
                                             mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_API_KEY}
                                             attributionControl={false}
@@ -357,13 +445,12 @@ const PostForm = ({ onSubmit, preset = {} }) => {
                                 )
                             }
                             <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-                                <Button
-                                    color="inherit"
+                                <StyledButton
                                     disabled={activeStep === 0}
                                     onClick={handleBack}
                                 >
                                     Back
-                                </Button>
+                                </StyledButton>
                                 <Box sx={{ flex: '1 1 auto' }} />
                                 {activeStep === steps.length - 1 ?
                                     <Grid container justifyContent="flex-end">
@@ -372,9 +459,9 @@ const PostForm = ({ onSubmit, preset = {} }) => {
                                                 <Button
                                                     type="submit"
                                                     fullWidth
-                                                    variant="contained"
-                                                    sx={{ mt: 3, mb: 2 }}
+                                                    sx={styButton}
                                                     onClick={handleFormSubmit}
+                                                    disabled={filesUploaded}
                                                 >
                                                     Publicar
                                                 </Button>
@@ -382,10 +469,9 @@ const PostForm = ({ onSubmit, preset = {} }) => {
                                         </Grid>
                                     </Grid>
                                     :
-                                    <Button
-                                        onClick={handleNext}>
+                                    <StyledButton onClick={handleNext}>
                                         Next
-                                    </Button>}
+                                    </StyledButton>}
                             </Box>
                         </Fragment>
                     )}

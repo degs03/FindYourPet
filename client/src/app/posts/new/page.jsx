@@ -2,7 +2,8 @@
 import { usePostContext } from "@/app/context/PostContext";
 import PostForm from "@/components/PostForm/page";
 import { createPost } from "../../api/route";
-const { Fragment  } = require("react");
+import { Fragment } from "react";
+
 const newPosts = () => {
     const { setDownloadURLs } = usePostContext();
     const newPost = async (data, onSuccess, onFail) => {

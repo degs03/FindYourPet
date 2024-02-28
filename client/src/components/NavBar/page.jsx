@@ -77,7 +77,7 @@ const NavBar = () => {
                         variant="h6"
                         noWrap
                         component="a"
-                        href="/"
+                        onClick={() => router.push("/")}
                         sx={{
                             mr: 2,
                             mb: 0.9,
@@ -159,7 +159,7 @@ const NavBar = () => {
                         variant="h5"
                         noWrap
                         component="a"
-                        href="/"
+                        onClick={() => router.push("/")}
                         sx={{
                             mr: 2,
                             display: { xs: 'flex', md: 'none' },
@@ -200,10 +200,12 @@ const NavBar = () => {
                             onClose={handleCloseUserMenu}
                         >
                             <MenuItem
-                                href="/account"
                                 component="a"
                                 variant="body2"
-                                onClick={handleCloseUserMenu}
+                                onClick={() => {
+                                    handleCloseUserMenu();
+                                    miCookie ? router.push("/account") : router.push("/account/login")
+                                }}
                                 sx={{
                                     my: 2, mx: 1,
                                     color: '#3B3561',
@@ -211,9 +213,9 @@ const NavBar = () => {
                                     textDecoration: 'none'
                                 }}
                             >
-                                {settings[0]}
+                                {miCookie ? settings[0] : "Iniciar sesión"}
                             </MenuItem>
-                            <MenuItem
+                            {miCookie ? <MenuItem
                                 component="a"
                                 variant="body2"
                                 onClick={(e) => {
@@ -228,7 +230,8 @@ const NavBar = () => {
                                 }}
                             >
                                 {settings[1]}
-                            </MenuItem>
+                            </MenuItem> : null}
+                            
                         </Menu>
                     </Box>
                 </Toolbar>

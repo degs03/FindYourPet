@@ -26,12 +26,6 @@ const FormWrapper = ({ children }) => {
     }
     return (
         <Fragment>
-            <Image
-                fill
-                style={{
-                    objectFit: 'cover',
-                    zIndex: -1
-                }} />
             <Box
                 display="flex"
                 justifyContent="center"
