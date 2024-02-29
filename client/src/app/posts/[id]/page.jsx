@@ -1,11 +1,13 @@
 'use client'
 
 import { useEffect, useState } from 'react';
-import { findPost } from '@/app/api/route';
+import { findPost, findUser } from '@/app/api/route';
 import { useParams, useRouter } from 'next/navigation';
 import { Box, Button, Container, Grid, Typography } from '@mui/material';
 import { Map, Marker } from "react-map-gl";
 import 'mapbox-gl/dist/mapbox-gl.css';
+import AttachEmailOutlinedIcon from '@mui/icons-material/AttachEmailOutlined';
+import PhoneOutlinedIcon from '@mui/icons-material/PhoneOutlined';
 import RoomIcon from '@mui/icons-material/Room';
 import Image from 'next/image';
 import Carousel from 'react-material-ui-carousel';
@@ -15,20 +17,24 @@ export default function Posts() {
     const router = useRouter();
     const { id } = useParams();
     const [post, setPost] = useState({});
+    const [user, setUser] = useState();
     const [images, setImages] = useState([]);
     const [location, setLocation] = useState({});
     const [viewport, setViewport] = useState({});
     const [width, setWidth] = useState(window.innerWidth);
-
     useEffect(() => {
         PostInfo();
-
         window.addEventListener("resize", handleResize);
 
         return () => {
             window.removeEventListener("resize", handleResize);
         };
     }, []);
+
+    useEffect(() => {
+        UserInfo();
+    }, [post])
+
 
     const PostInfo = async () => {
         try {
@@ -45,6 +51,17 @@ export default function Posts() {
             });
         } catch (error) {
             console.log({ error: error })
+        }
+    }
+    const UserInfo = async () => {
+        try {
+            if (post.user) {
+                const result = await findUser(post.user._id);
+                console.log(result);
+                setUser(result);
+            }
+        } catch (error) {
+            console.error(error);
         }
     }
 
@@ -72,30 +89,39 @@ export default function Posts() {
                         </Grid>
                     </Grid> : null}
             </Container>
-            <Container sx={{ py: 4, backgroundColor: "#FFF", my: 2, borderRadius: 3, height:'81vh' }} maxWidth="xl">
+            <Container sx={{ py: 4, backgroundColor: "#FFF", my: 2, borderRadius: 3, height: '81vh' }} maxWidth="xl">
                 <Grid container spacing={4}>
                     <Grid item xs={12} sm={6} md={6}>
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
-                                <Typography variant='h4' sx={{height:"5vh", overflow:"auto", scrollbarColor:"#C9C8C4 transparent", scrollbarWidth:"thin"}}>{post.title}</Typography>
+                                <Typography variant='h4' sx={{ height: "5vh", overflow: "auto", scrollbarColor: "#C9C8C4 transparent", scrollbarWidth: "thin" }}>{post.title}</Typography>
                             </Grid>
                             <Grid item xs={6} sm={6} md={3}>
                                 <Typography variant='h6' fontSize={"1.1rem"}>Nombre</Typography>
-                                <Typography variant='subtitle1' gutterBottom sx={{height:"5vh", overflow:"auto", scrollbarColor:"#C9C8C4 transparent", scrollbarWidth:"thin"}}>{post.name}</Typography>
+                                <Typography variant='subtitle1' gutterBottom sx={{ height: "5vh", overflow: "auto", scrollbarColor: "#C9C8C4 transparent", scrollbarWidth: "thin" }}>{post.name}</Typography>
                             </Grid>
-                            <Grid item xs={6} sm={6} md={9}>
+                            <Grid item xs={6} sm={6} md={3}>
                                 <Typography variant='h6' fontSize={"1.1rem"}>Edad</Typography>
-                                <Typography variant='subtitle1' gutterBottom sx={{height:"5vh", overflow:"auto", scrollbarColor:"#C9C8C4 transparent", scrollbarWidth:"thin"}}>{post.age}</Typography>
+                                <Typography variant='subtitle1' gutterBottom sx={{ height: "5vh", overflow: "auto", scrollbarColor: "#C9C8C4 transparent", scrollbarWidth: "thin" }}>{post.age}</Typography>
+                            </Grid>
+                            <Grid item xs={6} sm={6} md={6}>
+                                <Typography variant='h6' fontSize={"1.1rem"}>Contactos: </Typography>
+                                <Typography variant='subtitle1' gutterBottom sx={{display:'flex', color:'#3B3561', gap:'5px', scrollbarColor: "#C9C8C4 transparent", scrollbarWidth: "thin" }}>
+                                    <AttachEmailOutlinedIcon/> {user?.email}
+                                </Typography>
+                                <Typography sx={{display:'flex', gap:'5px' , color:'#3B3561'}}>
+                                    <PhoneOutlinedIcon/> {user?.phone ? user.phone : null}
+                                </Typography>
                             </Grid>
                             <Grid item xs={6} sm={6} md={3}>
                                 <Typography variant='h6' fontSize={"1.1rem"}>Especie</Typography>
-                                <Typography variant='subtitle1' gutterBottom  sx={{height:"5vh", overflow:"auto", scrollbarColor:"#C9C8C4 transparent", scrollbarWidth:"thin"}}>{post.species}</Typography>
+                                <Typography variant='subtitle1' gutterBottom sx={{ height: "5vh", overflow: "auto", scrollbarColor: "#C9C8C4 transparent", scrollbarWidth: "thin" }}>{post.species}</Typography>
                             </Grid>
                             <Grid item xs={6} sm={6} md={9}>
                                 <Typography variant='h6' fontSize={"1.1rem"}>Raza</Typography>
-                                <Typography variant='subtitle1' gutterBottom  sx={{height:"5vh", overflow:"auto", scrollbarColor:"#C9C8C4 transparent", scrollbarWidth:"thin"}}>{post.breed}</Typography>
+                                <Typography variant='subtitle1' gutterBottom sx={{ height: "5vh", overflow: "auto", scrollbarColor: "#C9C8C4 transparent", scrollbarWidth: "thin" }}>{post.breed}</Typography>
                             </Grid>
-                            <Grid item xs={12} sx={{height:"13vh", overflow:"auto", scrollbarColor:"#C9C8C4 transparent", scrollbarWidth:"thin"}}>
+                            <Grid item xs={12} sx={{ height: "13vh", overflow: "auto", scrollbarColor: "#C9C8C4 transparent", scrollbarWidth: "thin" }}>
                                 <Typography variant='subtitle1'>{post.description}</Typography>
                             </Grid>
                         </Grid>
@@ -124,7 +150,7 @@ export default function Posts() {
                     <Grid item xs={12} sm={6} md={6}>
                         <Carousel height={"70vh"}>
                             {images.map((img, idx) => (
-                                <Box key={idx} sx={{ position: "relative", width:'100%', height:'100%' }}>
+                                <Box key={idx} sx={{ position: "relative", width: '100%', height: '100%' }}>
                                     <Image alt='Pet' src={`${img}`} priority fill style={{ objectFit: "cover" }} sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" />
                                 </Box>
                             )

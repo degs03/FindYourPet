@@ -422,7 +422,6 @@ const Map = () => {
                             borderRadius: { lg: '20px 20px 20px 20px', md: '20px 20px 20px 20px', sm: '20px 20px 20px 20px', xs: '20px 20px 20px 20px' }
                         }} />
                 </Grid>
-
             </Grid>
         </Container >
     )
