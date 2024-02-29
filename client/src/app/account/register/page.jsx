@@ -18,7 +18,7 @@ const Register = () => {
                 iconColor: "white",
                 position: "bottom",
                 color: "white",
-                title: "Se ha creado la cuenta correctamente",
+                title: "Se ha registrado correctamente.",
                 background: "#a5dc86",
                 showConfirmButton: false,
                 timer: 2000,

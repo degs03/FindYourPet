@@ -97,7 +97,7 @@ module.exports.login = async (req, res) => {
             _id: user._id,
             firstName: user.firstName,
             lastName: user.lastName,
-        }, secretKey, { expiresIn: "10m" });
+        }, secretKey, { expiresIn: "24h" });
         res.cookie("userToken", newJWT, secretKey, { httpOnly: true });
         res.status(200);
         res.json(

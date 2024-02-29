@@ -68,11 +68,11 @@ const forgotPassword = () => { //preset trae data
                             sx={{
                                 backgroundColor: 'rgba(248, 248, 248, 0.507)',
                                 '& label.Mui-focused': {
-                                    color: '#4b3a2e'
+                                    color: '#3B3561'
                                 },
                                 '& .MuiOutlinedInput-root': {
                                     '&.Mui-focused fieldset': {
-                                        borderColor: '#4b3a2e'
+                                        borderColor: '#3B3561'
                                     }
                                 },
                                 mb:2

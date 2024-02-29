@@ -208,7 +208,7 @@ const PostForm = ({ onSubmit, preset = {} }) => {
                     <Grid container spacing={4}>
                         <Grid item xs={12} md={6}>
                             <Button variant="contained" sx={styButton} onClick={() => router.push("/")}>
-                                Inicio
+                                Página principal
                             </Button>
                         </Grid>
                         <Grid item md={6} sx={{ display: "flex", justifyContent: "flex-end", gap: 3 }}>
@@ -449,7 +449,7 @@ const PostForm = ({ onSubmit, preset = {} }) => {
                                     disabled={activeStep === 0}
                                     onClick={handleBack}
                                 >
-                                    Back
+                                    Volver
                                 </StyledButton>
                                 <Box sx={{ flex: '1 1 auto' }} />
                                 {activeStep === steps.length - 1 ?
@@ -470,7 +470,7 @@ const PostForm = ({ onSubmit, preset = {} }) => {
                                     </Grid>
                                     :
                                     <StyledButton onClick={handleNext}>
-                                        Next
+                                        Siguiente
                                     </StyledButton>}
                             </Box>
                         </Fragment>

@@ -52,7 +52,7 @@ const sty = {
     "& .MuiOutlinedInput-notchedOutline": {
         border: 'none'
     },
-    width: { xs: '90vw', sm: '90vw', md: "90vw", lg: '290px' },
+    width: { xs: '90vw', sm: '90vw' },
     bgcolor: '#e5e7eb',
     borderRadius: '25px'
 };
@@ -119,7 +119,7 @@ const Map = () => {
                 <ClearIcon fontSize="large" />
             </IconButton>
             <Grid item sx={{ width: 1, display: 'flex', justifyContent: 'center' }}>
-                <Typography variant="h5">
+                <Typography variant="h5" sx={{ color: "#3B3561" }}>
                     Avistamientos cercanos
                 </Typography>
             </Grid>
@@ -143,23 +143,31 @@ const Map = () => {
                 {filteredMarkers.length > 0 ?
                     filteredMarkers.map((item, idx) => (
                         <Grid key={idx}>
-                            <Box item key={idx} sx={{ display: 'flex', alignItems: 'center', mt: 2, px: 2 }}>
+                            <Box item key={idx}
+                                sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    m: 1, mx: 2,
+                                    p: 1,
+                                    width: { xs: '30vh', sm: '50vh' }
+                                }}
+                                onClick={() => router.push(`/posts/${item._id}`)}
+                            >
                                 <StyledBadge
                                     overlap="circular"
                                     anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                                    variant="dot"
                                 >
-                                    <Avatar alt="Remy Sharp" src={`${item.image}`} />
+                                    <Avatar alt="Remy Sharp" src={`${item.image} `} />
                                 </StyledBadge>
-                                <Grid sx={{ display: 'flex', width: '100%', flexDirection: 'column' }}>
-                                    <Typography sx={{ ml: 2 }} >{item.name}</Typography>
+                                <Grid sx={{ display: 'flex', width: '90%', flexDirection: 'column' }}>
+                                    <Typography sx={{ ml: 2, textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap" }} >{item.name}</Typography>
                                     <Typography variant="body2" color="text.secondary" sx={{ ml: 2 }}>{dist[idx] < 1.000 ? Math.round(dist[idx] * 1000) + ' m' : dist[idx].toFixed(2) + ' km'}</Typography>
                                 </Grid>
                             </Box>
                         </Grid>
                     )) :
                     (
-                        <Typography variant="h6" sx={{ fontWeight: 'bold', marginTop: 4, ml: 5 }}>
+                        <Typography variant="h6" sx={{ fontWeight: 'bold', marginTop: 4, ml: 5, color: "#3B3561" }}>
                             No se han encontrado resultados.
                         </Typography>)
                 }
@@ -315,6 +323,7 @@ const Map = () => {
                                 <TextField
                                     sx={sty}
                                     placeholder="Busca avistamientos"
+                                    fullWidth
                                     InputProps={{
                                         endAdornment: (
                                             <InputAdornment position="end">
@@ -334,29 +343,39 @@ const Map = () => {
                             <Grid container sx={{ display: 'flex', flexDirection: 'column', mb: 2, mt: 2 }}>
 
                                 <Typography sx={{ fontSize: '16px', fontWeight: 'bold', color: '#3B3561' }}>
-                                    Avistamientos mas cercanos a tu zona:
+                                    Avistamientos cercanos a tu zona:
                                 </Typography>
 
                                 <Grid item sx={{ mt: 1 }}>
                                     {filteredMarkers.length > 0 ?
                                         filteredMarkers.map((item, idx) => (
                                             <Grid key={idx}>
-                                                <Box item key={idx} sx={{ display: 'flex', alignItems: 'center', mt: 2 }}>
+                                                <Box item key={idx}
+                                                    sx={{
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        mt: 1,
+                                                        cursor:"pointer",
+                                                        p: 1,
+                                                        width: { lg: '25vh', md: '20vh', sm: '10vh' }
+                                                    }}
+                                                    onClick={() => router.push(`/posts/${item._id}`)}
+                                                >
                                                     <StyledBadge
                                                         overlap="circular"
                                                         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                                                     >
                                                         <Avatar alt="Remy Sharp" src={`${item.image} `} />
                                                     </StyledBadge>
-                                                    <Grid sx={{ display: 'flex', width: '100%', flexDirection: 'column' }}>
-                                                        <Typography sx={{ ml: 2 }} >{item.name}</Typography>
+                                                    <Grid sx={{ display: 'flex', width: '90%', flexDirection: 'column' }}>
+                                                        <Typography sx={{ ml: 2 }} noWrap>{item.name}</Typography>
                                                         <Typography variant="body2" color="text.secondary" sx={{ ml: 2 }}>{dist[idx] < 1.000 ? Math.round(dist[idx] * 1000) + ' m' : dist[idx].toFixed(2) + ' km'}</Typography>
                                                     </Grid>
                                                 </Box>
                                             </Grid>
                                         )) :
                                         (
-                                            <Typography variant="h6" sx={{ fontWeight: 'bold', marginTop: 4 }}>
+                                            <Typography variant="subtitle1" sx={{ fontWeight: 'bold', marginTop: 4, color: "#3B3561" }}>
                                                 No se han encontrado resultados.
                                             </Typography>)
 
@@ -368,8 +387,8 @@ const Map = () => {
                                     <Toolbar sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                         <StyledFab aria-label="add" onClick={toggleDrawer('right', true)} sx={{ top: -20 }}>
                                             <Grid item sx={{ display: 'flex', flexDirection: 'row', height: '100%', alignItems: 'center' }}>
-                                                <Typography sx={{ mt: 0.88 }}>Avistamientos</Typography>
-                                                <DrawIcon sx={{ height: '10px', width: '10px' }} />
+                                                <Typography sx={{ mt: 0.65, textTransform: "none", mr: 0.3 }}>Avistamientos</Typography>
+                                                <DrawIcon sx={{ height: '10px', width: '10px', color: "#3B3561" }} />
                                             </Grid>
                                         </StyledFab>
                                         <Box sx={{ flexGrow: 1 }} />

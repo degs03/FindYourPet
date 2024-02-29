@@ -58,7 +58,7 @@ const NavBar = () => {
                 iconColor: "white",
                 position: "bottom",
                 color: "white",
-                title: "Has cerrado sesión correctamente",
+                title: "Has cerrado sesión correctamente.",
                 background: "#a5dc86",
                 showConfirmButton: false,
                 timer: 2000,
@@ -85,6 +85,7 @@ const NavBar = () => {
                             fontWeight: 800,
                             letterSpacing: '.1rem',
                             color: '#3B3561',
+                            cursor:"pointer",
                             textDecoration: 'none'
                         }}
                     >
@@ -167,6 +168,7 @@ const NavBar = () => {
                             justifyContent:'center',
                             letterSpacing: '.1rem',
                             color: '#3B3561',
+                            cursor:"pointer",
                             textDecoration: 'none',
                         }}
                     >

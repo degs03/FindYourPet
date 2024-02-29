@@ -79,7 +79,7 @@ const UserForm = ({ onSubmit, preset = {}, isSignUp }) => { //preset trae data
 
     return (
         <FormWrapper>
-            <Typography component="h1" variant="h5" color="#4b3a2e">
+            <Typography component="h1" variant="h5" color="#3B3561">
                 {isSignUp == true ? ('Registrate') : ('Iniciar sesión')}
             </Typography>
             <Box component="form" noValidate sx={{ mt: 3 }}>{/*mt = margin bottom */}
@@ -91,16 +91,16 @@ const UserForm = ({ onSubmit, preset = {}, isSignUp }) => { //preset trae data
                                 InputProps={{ className: styles.input }}
                                 sx={{
                                     '& label.Mui-focused': {
-                                        color: '#4b3a2e'
+                                        color: '#3B3561'
                                     },
                                     '& .MuiOutlinedInput-root': {
                                         '&.Mui-focused fieldset': {
-                                            borderColor: '#4b3a2e'
+                                            borderColor: '#3B3561'
                                         }
                                     }
                                 }}
                                 name="firstName"
-                                label="First Name"
+                                label="Nombre"
                                 fullWidth
                                 value={firstName}
                                 onChange={(e) => {
@@ -118,16 +118,16 @@ const UserForm = ({ onSubmit, preset = {}, isSignUp }) => { //preset trae data
                                 InputProps={{ className: styles.input }}
                                 sx={{
                                     '& label.Mui-focused': {
-                                        color: '#4b3a2e'
+                                        color: '#3B3561'
                                     },
                                     '& .MuiOutlinedInput-root': {
                                         '&.Mui-focused fieldset': {
-                                            borderColor: '#4b3a2e'
+                                            borderColor: '#3B3561'
                                         }
                                     }
                                 }}
                                 name="lastName"
-                                label="Last Name"
+                                label="Apellido"
                                 fullWidth
                                 value={lastName}
                                 onChange={(e) => {
@@ -144,11 +144,11 @@ const UserForm = ({ onSubmit, preset = {}, isSignUp }) => { //preset trae data
                             InputProps={{ className: styles.input }}
                             sx={{
                                 '& label.Mui-focused': {
-                                    color: '#4b3a2e'
+                                    color: '#3B3561'
                                 },
                                 '& .MuiOutlinedInput-root': {
                                     '&.Mui-focused fieldset': {
-                                        borderColor: '#4b3a2e'
+                                        borderColor: '#3B3561'
                                     }
                                 }
                             }}
@@ -171,11 +171,11 @@ const UserForm = ({ onSubmit, preset = {}, isSignUp }) => { //preset trae data
                                 InputProps={{ className: styles.input }}
                                 sx={{
                                     '& label.Mui-focused': {
-                                        color: '#4b3a2e'
+                                        color: '#3B3561'
                                     },
                                     '& .MuiOutlinedInput-root': {
                                         '&.Mui-focused fieldset': {
-                                            borderColor: '#4b3a2e'
+                                            borderColor: '#3B3561'
                                         }
                                     }
                                 }}
@@ -199,11 +199,11 @@ const UserForm = ({ onSubmit, preset = {}, isSignUp }) => { //preset trae data
                                 InputProps={{ className: styles.input }}
                                 sx={{
                                     '& label.Mui-focused': {
-                                        color: '#4b3a2e'
+                                        color: '#3B3561'
                                     },
                                     '& .MuiOutlinedInput-root': {
                                         '&.Mui-focused fieldset': {
-                                            borderColor: '#4b3a2e'
+                                            borderColor: '#3B3561'
                                         }
                                     }
                                 }}
@@ -228,11 +228,11 @@ const UserForm = ({ onSubmit, preset = {}, isSignUp }) => { //preset trae data
                                 InputProps={{ className: styles.input }}
                                 sx={{
                                     '& label.Mui-focused': {
-                                        color: '#4b3a2e'
+                                        color: '#3B3561'
                                     },
                                     '& .MuiOutlinedInput-root': {
                                         '&.Mui-focused fieldset': {
-                                            borderColor: '#4b3a2e'
+                                            borderColor: '#3B3561'
                                         }
                                     }
                                 }}

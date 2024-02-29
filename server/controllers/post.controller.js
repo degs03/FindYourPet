@@ -59,16 +59,16 @@ module.exports.deletePost = async (req, res) => {
     try {
         const postId = req.params.id;
 
-        if (!user) {
-            res.status(404);
-            return res.json({ error: "User not found for transaction" });
-        }
-
         // Busca el usuario que tenga el post
         const user = await User.findOneAndUpdate(
             { posts: postId },
             { $pull: { posts: postId } }
         );
+
+        if (!user) {
+            res.status(404);
+            return res.json({ error: "User not found" });
+        }
 
         const deletedPost = await Post.deleteOne({ _id: postId });
 

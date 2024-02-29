@@ -77,23 +77,23 @@ export default function Posts() {
                     <Grid item xs={12} sm={6} md={6}>
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
-                                <Typography variant='h4'>{post.title}</Typography>
+                                <Typography variant='h4' sx={{height:"5vh", overflow:"auto", scrollbarColor:"#C9C8C4 transparent", scrollbarWidth:"thin"}}>{post.title}</Typography>
                             </Grid>
-                            <Grid item xs={6} sm={6} md={2}>
+                            <Grid item xs={6} sm={6} md={3}>
                                 <Typography variant='h6' fontSize={"1.1rem"}>Nombre</Typography>
-                                <Typography variant='subtitle1' gutterBottom>{post.name}</Typography>
+                                <Typography variant='subtitle1' gutterBottom sx={{height:"5vh", overflow:"auto", scrollbarColor:"#C9C8C4 transparent", scrollbarWidth:"thin"}}>{post.name}</Typography>
                             </Grid>
-                            <Grid item xs={6} sm={6} md={10}>
+                            <Grid item xs={6} sm={6} md={9}>
                                 <Typography variant='h6' fontSize={"1.1rem"}>Edad</Typography>
-                                <Typography variant='subtitle1' gutterBottom>{post.age}</Typography>
+                                <Typography variant='subtitle1' gutterBottom sx={{height:"5vh", overflow:"auto", scrollbarColor:"#C9C8C4 transparent", scrollbarWidth:"thin"}}>{post.age}</Typography>
                             </Grid>
-                            <Grid item xs={6} sm={6} md={2}>
+                            <Grid item xs={6} sm={6} md={3}>
                                 <Typography variant='h6' fontSize={"1.1rem"}>Especie</Typography>
-                                <Typography variant='subtitle1' gutterBottom>{post.species}</Typography>
+                                <Typography variant='subtitle1' gutterBottom  sx={{height:"5vh", overflow:"auto", scrollbarColor:"#C9C8C4 transparent", scrollbarWidth:"thin"}}>{post.species}</Typography>
                             </Grid>
-                            <Grid item xs={6} sm={6} md={10}>
+                            <Grid item xs={6} sm={6} md={9}>
                                 <Typography variant='h6' fontSize={"1.1rem"}>Raza</Typography>
-                                <Typography variant='subtitle1' gutterBottom>{post.breed}</Typography>
+                                <Typography variant='subtitle1' gutterBottom  sx={{height:"5vh", overflow:"auto", scrollbarColor:"#C9C8C4 transparent", scrollbarWidth:"thin"}}>{post.breed}</Typography>
                             </Grid>
                             <Grid item xs={12} sx={{height:"13vh", overflow:"auto", scrollbarColor:"#C9C8C4 transparent", scrollbarWidth:"thin"}}>
                                 <Typography variant='subtitle1'>{post.description}</Typography>

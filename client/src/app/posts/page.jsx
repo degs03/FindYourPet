@@ -1,14 +1,14 @@
 'use client'
 
-import { useEffect, useState } from 'react';
-import { Box, Button, Card, CardActions, CardContent, CardMedia, Container, Grid, IconButton, ImageList, ImageListItem, TextField, Typography } from '@mui/material';
+import { Fragment, useEffect, useState } from 'react';
+import { Box, Button, Card, CardActions, CardContent, CardMedia, Container, Grid, IconButton, TextField, Typography } from '@mui/material';
 import ShareIcon from '@mui/icons-material/Share';
-import { Fragment } from 'react';
 import { findAllPosts } from '../api/route';
 import Link from 'next/link';
 import SearchIcon from '@mui/icons-material/Search';
 import { styButton } from '@/components/Styles/styles';
 import { useRouter } from 'next/navigation';
+import Loader from '@/components/Styles/catLoad/catLoad';
 
 const sty = {
     color: '#FFFF',
@@ -103,38 +103,51 @@ export default function Posts() {
                         <Button variant="contained" sx={styButton} onClick={() => router.push("/posts/new")}>
                             Agregar publicación
                         </Button></Grid> : null}
-                    {filteredPosts.map((card, idx) => (
-                        <Grid item key={idx} xs={12} sm={6} md={4}>
-                            <Card
-                                sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
-                            >
-                                <CardContent sx={{ flexGrow: 1 }}>
-                                    <Typography gutterBottom variant="h5" component="h2">
-                                        {card.title}
+                    {filteredPosts.length > 0 ?
+                        filteredPosts.map((card, idx) => (
+                            <Grid item key={idx} xs={12} sm={6} md={4}>
+                                <Card
+                                    sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
+                                >
+                                    <CardContent sx={{ flexGrow: 1 }}>
+                                        <Typography gutterBottom variant="h5" component="h2" noWrap>
+                                            {card.title}
+                                        </Typography>
+                                        <Typography noWrap>
+                                            {card.description}
+                                        </Typography>
+                                    </CardContent>
+                                    <CardMedia
+                                        component="div"
+                                        sx={{
+                                            // 16:9
+                                            pt: '56.25%',
+                                            mx: 2,
+                                            borderRadius: 1
+                                        }}
+                                        image={card.image}
+                                    />
+                                    <CardActions sx={{ display: "flex", justifyContent: "space-between", mx:1 }}>
+                                        <IconButton>
+                                            <ShareIcon sx={{ color: "#3B3561" }} />
+                                        </IconButton>
+                                        <Link href={`/posts/${card._id}`} style={{ textDecoration: "none", color: "#3B3561" }}>
+                                            Ver más
+                                        </Link>
+                                    </CardActions>
+                                </Card>
+                            </Grid>
+                        )) :
+                        (
+                            <Grid item xs={12}>
+                                <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", mt: 15 }}>
+                                    <Loader />
+                                    <Typography variant="h6" sx={{ fontWeight: 'bold', color: "#3B3561", mt:4 }}>
+                                        Lo siento, no pudimos encontrar lo que estas buscando.
                                     </Typography>
-                                    <Typography noWrap>
-                                        {card.description}
-                                    </Typography>
-                                </CardContent>
-                                <CardMedia
-                                    component="div"
-                                    sx={{
-                                        // 16:9
-                                        pt: '56.25%',
-                                        mx: 2,
-                                        borderRadius: 1
-                                    }}
-                                    image={card.image}
-                                />
-                                <CardActions sx={{ display: "flex", justifyContent: "space-between", m: 1 }}>
-                                    <ShareIcon />
-                                    <Link href={`/posts/${card._id}`} style={{ textDecoration: "none", color: "#3B3561" }}>
-                                        Ver más
-                                    </Link>
-                                </CardActions>
-                            </Card>
-                        </Grid>
-                    ))}
+                                </Box>
+                            </Grid>
+                        )}
                 </Grid>
             </Container>
         </Box>

@@ -31,7 +31,7 @@ const Dropzone = ({ onFilesUploaded }) => {
                     iconColor: "white",
                     position: "bottom",
                     color: "white",
-                    title: "se ha subido la imagen correctamente",
+                    title: "Se ha subido la imagen correctamente.",
                     background: "#a5dc86",
                     showConfirmButton: false,
                     timer: 2000,
@@ -117,7 +117,7 @@ const Dropzone = ({ onFilesUploaded }) => {
                         textTransform: 'none'
                     }}
                 >
-                    Guardar Imagenes
+                    Guardar imagenes
                 </Button>
             </Grid>
         </Fragment>

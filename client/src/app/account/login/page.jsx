@@ -24,7 +24,7 @@ const Login = () => {
                 iconColor: "white",
                 position: "bottom",
                 color: "white",
-                title: "Has iniciado sesión correctamente",
+                title: "Has iniciado sesión correctamente.",
                 background: "#a5dc86",
                 showConfirmButton: false,
                 timer: 2000,
